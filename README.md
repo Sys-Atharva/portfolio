@@ -1,73 +1,56 @@
-# Welcome to your Lovable project
+# 🚀 Interactive 3D Portfolio
 
-## Project info
+An immersive, high-performance developer portfolio built with **React**, **Vite**, and **Three.js/Framer Motion**. This project features a dynamic integration with the GitHub API to showcase live repositories in real-time.
 
-**URL**: https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID
+[![Deploy Vite Site](https://github.com/Sys-Atharva/portfolio/actions/workflows/deploy.yml/badge.svg)](https://github.com/Sys-Atharva/portfolio/actions/workflows/deploy.yml)
 
-## How can I edit this code?
+## 🌐 Live Demo
+View the live site here: [sys-atharva.github.io/portfolio/](https://sys-atharva.github.io/portfolio/)
 
-There are several ways of editing your application.
+## ✨ Key Features
+- **Dynamic Project Fetching:** Automatically pulls latest repositories via GitHub REST API.
+- **3D Interactive Backdrop:** Immersive user experience using Framer Motion and custom shaders.
+- **Responsive Design:** Optimized for mobile (Samsung F62) and desktop (Dell Inspiron) viewing.
+- **Automated Deployment:** CI/CD pipeline managed via GitHub Actions.
+- **Glassmorphic UI:** Built using Tailwind CSS and shadcn/ui components.
 
-**Use Lovable**
+## 🛠️ Tech Stack
+- **Framework:** React 18 (with TypeScript)
+- **Build Tool:** Vite
+- **Styling:** Tailwind CSS
+- **Animations:** Framer Motion & Lucide React
+- **Data Fetching:** TanStack Query & GitHub API
+- **Deployment:** GitHub Pages
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and start prompting.
+## 📂 Project Structure
+```text
+├── .github/workflows  # GitHub Actions Deployment scripts
+├── src
+│   ├── components     # UI Components (FloatingNav, SpotlightCard, etc.)
+│   ├── pages          # Page views (Index, Projects, NotFound)
+│   ├── hooks          # Custom React hooks
+│   └── lib            # Utility functions
+├── public             # Static 3D assets and icons
+└── vite.config.ts     # Vite configuration & path aliasing
 
-Changes made via Lovable will be committed automatically to this repo.
+# 🚀 Getting Started Locally
+1. Clone the repository:
+git clone [https://github.com/Sys-Atharva/portfolio.git](https://github.com/Sys-Atharva/portfolio.git)
+cd portfolio
 
-**Use your preferred IDE**
+2. Install dependencies:
+npm install
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
-
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
-
-Follow these steps:
-
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
-
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
-
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+3. Start development server:
 npm run dev
-```
 
-**Edit a file directly in GitHub**
+# ⚙️ Deployment
+This project is configured for GitHub Pages. To deploy your own version:
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+1. Ensure base: '/repo-name/' is set correctly in vite.config.ts.
 
-**Use GitHub Codespaces**
+2. Ensure the basename in BrowserRouter matches the repository name.
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+3. Push changes to the main branch to trigger the GitHub Action.
 
-## What technologies are used for this project?
-
-This project is built with:
-
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
-
-## How can I deploy this project?
-
-Simply open [Lovable](https://lovable.dev/projects/REPLACE_WITH_PROJECT_ID) and click on Share -> Publish.
-
-## Can I connect a custom domain to my Lovable project?
-
-Yes, you can!
-
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
-
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+Developed by Atharva Purvat
