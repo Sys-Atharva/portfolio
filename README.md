@@ -33,7 +33,7 @@ View the live site here: [sys-atharva.github.io/portfolio/](https://sys-atharva.
 ├── public             # Static 3D assets and icons
 └── vite.config.ts     # Vite configuration & path aliasing
 
-# 🚀 Getting Started Locally
+## 🚀 Getting Started Locally
 1. Clone the repository:
 git clone [https://github.com/Sys-Atharva/portfolio.git](https://github.com/Sys-Atharva/portfolio.git)
 cd portfolio
@@ -44,7 +44,7 @@ npm install
 3. Start development server:
 npm run dev
 
-# ⚙️ Deployment
+## ⚙️ Deployment
 This project is configured for GitHub Pages. To deploy your own version:
 
 1. Ensure base: '/repo-name/' is set correctly in vite.config.ts.
