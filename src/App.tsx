@@ -5,6 +5,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import Index from "./pages/Index.tsx";
 import Projects from "./pages/Projects.tsx";
+import InquiryFormDemo from "./pages/InquiryFormDemo.tsx";
 import NotFound from "./pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
@@ -19,6 +20,7 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/projects" element={<Projects />} />
+          <Route path="/inquiry" element={<InquiryFormDemo />} />
           <Route path="*" element={<NotFound />} />
         </Routes>
       </BrowserRouter>

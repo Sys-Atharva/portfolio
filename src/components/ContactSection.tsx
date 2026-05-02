@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Mail } from "lucide-react";
+import { Link } from "react-router-dom";
 import SpotlightCard from "./SpotlightCard";
 
 const ContactSection = () => {
@@ -21,14 +22,12 @@ const ContactSection = () => {
               <p className="text-muted-foreground font-body mb-8">
                 Have a project idea or just want to chat? Reach out.
               </p>
-              <a
-                href="https://docs.google.com/forms/d/e/your-form-id/viewform"
-                target="_blank"
-                rel="noopener noreferrer"
+              <Link
+                to="/inquiry"
                 className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-primary text-primary-foreground font-display font-semibold text-sm tracking-wide hover:brightness-110 transition-all duration-200"
               >
                 Get In Touch
-              </a>
+              </Link>
             </div>
           </SpotlightCard>
         </motion.div>
