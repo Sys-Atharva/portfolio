@@ -25,8 +25,10 @@ const requiredKeys = [
 ];
 
 const missingKeys = requiredKeys.filter((key) => !firebaseConfig[key]);
+
+// Initialize variables outside the scope
 let app;
-let db;
+let db = null; // Initialize as null to avoid "undefined" reference errors
 
 if (missingKeys.length > 0) {
   console.error(
@@ -36,12 +38,17 @@ if (missingKeys.length > 0) {
   );
 } else {
   // Only initialize if we have all required keys
-  app = initializeApp(firebaseConfig);
-  if (typeof window !== "undefined") {
-    getAnalytics(app);
+  try {
+    app = initializeApp(firebaseConfig);
+    if (typeof window !== "undefined") {
+      getAnalytics(app);
+    }
+    db = getFirestore(app);
+    console.log("✅ Firebase & Firestore initialized successfully.");
+  } catch (error) {
+    console.error("❌ Firebase initialization failed:", error);
   }
-  db = getFirestore(app);
 }
 
-// Export db even if initialization failed (will be undefined)
+// Export db so other components can import it
 export { db };

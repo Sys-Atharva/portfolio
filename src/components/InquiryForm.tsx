@@ -203,7 +203,11 @@ export function InquiryForm() {
         timestamp: new Date(),
       };
 
-      // 1. Save to Firebase (already done)
+      if (!db) {
+        throw new Error("Firebase not initialized. Please check your Firebase config and environment variables.");
+      }
+
+      // 1. Save to Firebase
       const docRef = await addDoc(collection(db, "inquiries"), sanitizedData);
 
       // 2. Ping Pabbly (The "Free" Bypass)
