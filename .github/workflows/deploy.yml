@@ -10,6 +10,8 @@ permissions:
 jobs:
   build:
     runs-on: ubuntu-latest
+    # This unlocks the "Environment secrets" shown in your screenshot
+    environment: github-pages 
     steps:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
@@ -17,16 +19,19 @@ jobs:
           node-version: 20
           cache: 'npm'
       - run: npm install
-      # Inject the secrets directly into the build command
+      
+      # THE FIX: Force GitHub to create a physical .env file for Vite
+      - name: Generate Environment Variables
+        run: |
+          echo "VITE_FIREBASE_APIKEY=${{ secrets.VITE_FIREBASE_APIKEY }}" >> .env
+          echo "VITE_FIREBASE_AUTHDOMAIN=${{ secrets.VITE_FIREBASE_AUTHDOMAIN }}" >> .env
+          echo "VITE_FIREBASE_PROJECTID=${{ secrets.VITE_FIREBASE_PROJECTID }}" >> .env
+          echo "VITE_FIREBASE_STORAGEBUCKET=${{ secrets.VITE_FIREBASE_STORAGEBUCKET }}" >> .env
+          echo "VITE_FIREBASE_MESSAGINGSENDERID=${{ secrets.VITE_FIREBASE_MESSAGINGSENDERID }}" >> .env
+          echo "VITE_FIREBASE_APPID=${{ secrets.VITE_FIREBASE_APPID }}" >> .env
+          echo "VITE_FIREBASE_MEASUREMENTID=${{ secrets.VITE_FIREBASE_MEASUREMENTID }}" >> .env
+
       - run: npm run build
-        env:
-          VITE_FIREBASE_APIKEY: ${{ secrets.VITE_FIREBASE_APIKEY }}
-          VITE_FIREBASE_AUTHDOMAIN: ${{ secrets.VITE_FIREBASE_AUTHDOMAIN }}
-          VITE_FIREBASE_PROJECTID: ${{ secrets.VITE_FIREBASE_PROJECTID }}
-          VITE_FIREBASE_STORAGEBUCKET: ${{ secrets.VITE_FIREBASE_STORAGEBUCKET }}
-          VITE_FIREBASE_MESSAGINGSENDERID: ${{ secrets.VITE_FIREBASE_MESSAGINGSENDERID }}
-          VITE_FIREBASE_APPID: ${{ secrets.VITE_FIREBASE_APPID }}
-          VITE_FIREBASE_MEASUREMENTID: ${{ secrets.VITE_FIREBASE_MEASUREMENTID }}
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
