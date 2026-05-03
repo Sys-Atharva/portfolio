@@ -14,6 +14,8 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENTID,
 };
 
+console.log('Firebase Environment Check:', import.meta.env.VITE_FIREBASE_PROJECTID);
+
 // Validation check to prevent initialization with missing data
 const requiredKeys = [
   "apiKey",
