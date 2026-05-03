@@ -28,7 +28,7 @@ const missingKeys = requiredKeys.filter((key) => !firebaseConfig[key]);
 
 // Initialize variables outside the scope
 let app;
-let db = null; // Initialize as null to avoid "undefined" reference errors
+export let db = null; // Initialize as null to avoid "undefined" reference errors
 
 if (missingKeys.length > 0) {
   console.error(
@@ -50,5 +50,4 @@ if (missingKeys.length > 0) {
   }
 }
 
-// Export db so other components can import it
-export { db };
+// db is exported above so other components can import it once initialized
