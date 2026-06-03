@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Home, Layers, Briefcase, Mail, Menu, X, User } from "lucide-react";
-import { Link, useLocation } from "react-router-dom";
+import { Link, useLocation, useNavigate } from "react-router-dom";
 
 const navItems = [
   { icon: Home, label: "Home", path: "/" },
@@ -13,6 +13,7 @@ const navItems = [
 
 const FloatingNav = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [mobileOpen, setMobileOpen] = useState(false);
 
   // Close mobile menu on route change
@@ -20,15 +21,35 @@ const FloatingNav = () => {
     setMobileOpen(false);
   }, [location.pathname]);
 
+  // Handle hash scrolling when on home page
+  useEffect(() => {
+    if (location.pathname === "/") {
+      const hash = location.hash.slice(1); // Remove the # character
+      if (hash) {
+        setTimeout(() => {
+          const element = document.getElementById(hash);
+          if (element) {
+            element.scrollIntoView({ behavior: "smooth" });
+          }
+        }, 100);
+      }
+    }
+  }, [location.hash, location.pathname]);
+
   const handleClick = (path: string) => {
     setMobileOpen(false);
     if (path.startsWith("/#")) {
       const id = path.slice(2);
       if (location.pathname !== "/") {
-        window.location.href = path;
+        // Navigate to home with hash, useEffect will handle scrolling
+        navigate("/" + path);
         return;
       }
-      document.getElementById(id)?.scrollIntoView({ behavior: "smooth" });
+      // Already on home page, just scroll
+      const element = document.getElementById(id);
+      if (element) {
+        element.scrollIntoView({ behavior: "smooth" });
+      }
     }
   };
 
