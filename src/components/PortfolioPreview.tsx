@@ -1,7 +1,6 @@
 import { motion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import SpotlightCard from "./SpotlightCard";
 
 const projects = [
   { title: "Web Dashboard", category: "Software", desc: "Full-stack analytics dashboard with real-time data." },
@@ -30,14 +29,14 @@ const PortfolioPreview = () => {
               whileInView={{ opacity: 1 }}
               viewport={{ once: true }}
               transition={{ duration: 0.4, delay: 0.1 }}
-              className="text-muted-foreground font-body"
+              className="text-slate-400 font-body"
             >
               Projects spanning software and hardware
             </motion.p>
           </div>
           <Link
             to="/projects"
-            className="hidden sm:flex items-center gap-1 text-primary text-sm font-medium hover:underline"
+            className="hidden sm:flex items-center gap-1 text-[#10B981] text-sm font-medium hover:underline"
           >
             View All <ArrowUpRight className="w-4 h-4" />
           </Link>
@@ -45,30 +44,33 @@ const PortfolioPreview = () => {
 
         <div className="grid sm:grid-cols-2 gap-4">
           {projects.map((p, i) => (
-            <motion.div
+            <motion.a
               key={p.title}
+              href="https://github.com/Sys-Atharva"
+              target="_blank"
+              rel="noopener noreferrer"
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
+              viewport={{ once: true, margin: "-80px" }}
               transition={{ duration: 0.3, delay: i * 0.08 }}
+              whileHover={{ scale: 1.015, y: -4 }}
+              className="group rounded-lg border border-slate-800 bg-slate-900/40 p-6 transition-colors duration-300 hover:border-[#10B981]/50 will-change-transform"
             >
-              <SpotlightCard href="https://github.com/Sys-Atharva">
-                <span className={`text-xs font-body font-medium tracking-wider uppercase ${
-                  p.category === "Software" ? "text-primary" : "text-secondary"
-                }`}>
-                  {p.category}
-                </span>
-                <h3 className="font-display text-lg font-semibold mt-2 mb-1">{p.title}</h3>
-                <p className="text-muted-foreground text-sm font-body">{p.desc}</p>
-                <ArrowUpRight className="w-4 h-4 text-muted-foreground mt-3" />
-              </SpotlightCard>
-            </motion.div>
+              <span className={`text-xs font-body font-medium tracking-wider uppercase ${
+                p.category === "Software" ? "text-[#10B981]" : "text-[#06B6D4]"
+              }`}>
+                {p.category}
+              </span>
+              <h3 className="font-display text-lg font-semibold mt-2 mb-1">{p.title}</h3>
+              <p className="text-slate-400 text-sm font-body">{p.desc}</p>
+              <ArrowUpRight className="w-4 h-4 text-slate-500 mt-3 transition-colors group-hover:text-[#10B981]" />
+            </motion.a>
           ))}
         </div>
 
         <Link
           to="/projects"
-          className="sm:hidden flex items-center justify-center gap-1 text-primary text-sm font-medium mt-6 hover:underline"
+          className="sm:hidden flex items-center justify-center gap-1 text-[#10B981] text-sm font-medium mt-6 hover:underline"
         >
           View All <ArrowUpRight className="w-4 h-4" />
         </Link>

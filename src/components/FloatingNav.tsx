@@ -1,194 +1,73 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { Home, Layers, Briefcase, Mail, Menu, X, User } from "lucide-react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+import { Menu, X } from "lucide-react";
 
 const navItems = [
-  { icon: Home, label: "Home", path: "/" },
-  { icon: User, label: "About", path: "/#about" },
-  { icon: Layers, label: "Skills", path: "/#skills" },
-  { icon: Briefcase, label: "Portfolio", path: "/projects" },
-  { icon: Mail, label: "Contact", path: "/#contact" },
+  { name: "Home", href: "/#home" },
+  { name: "About", href: "/#about" },
+  { name: "Projects", href: "/projects" },
+  { name: "Contact", href: "/#contact" },
 ];
 
 const FloatingNav = () => {
-  const location = useLocation();
-  const navigate = useNavigate();
-  const [mobileOpen, setMobileOpen] = useState(false);
-
-  // Close mobile menu on route change
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [location.pathname]);
-
-  // Handle hash scrolling when on home page
-  useEffect(() => {
-    if (location.pathname === "/") {
-      const hash = location.hash.slice(1); // Remove the # character
-      if (hash) {
-        setTimeout(() => {
-          const element = document.getElementById(hash);
-          if (element) {
-            element.scrollIntoView({ behavior: "smooth" });
-          }
-        }, 100);
-      }
-    }
-  }, [location.hash, location.pathname]);
-
-  const handleClick = (path: string) => {
-    setMobileOpen(false);
-    if (path.startsWith("/#")) {
-      const id = path.slice(2);
-      if (location.pathname !== "/") {
-        // Navigate to home with hash, useEffect will handle scrolling
-        navigate("/" + path);
-        return;
-      }
-      // Already on home page, just scroll
-      const element = document.getElementById(id);
-      if (element) {
-        element.scrollIntoView({ behavior: "smooth" });
-      }
-    }
-  };
-
-  const isActive = (path: string) => {
-    if (path === "/") return location.pathname === "/";
-    if (!path.startsWith("/#")) return location.pathname === path;
-    return false;
-  };
+  const [menuOpen, setMenuOpen] = useState(false);
 
   return (
-    <>
-      {/* Desktop / Tablet floating capsule */}
-      <motion.nav
-        initial={{ y: -80, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.4, ease: "easeOut" }}
-        className="fixed top-5 left-1/2 -translate-x-1/2 z-50 hidden md:block"
-      >
-        <div className="nav-capsule flex items-center gap-1 px-3 py-2 rounded-full">
-          {/* Logo */}
-          <Link to="/" className="flex items-center gap-1.5 pr-4 mr-2 border-r border-border">
-            <span className="font-mono text-xs tracking-tight text-primary font-semibold">SA</span>
-            <span className="font-mono text-xs tracking-tight text-muted-foreground">//</span>
-            <span className="font-mono text-xs tracking-tight text-foreground">Sys-Atharva</span>
-          </Link>
-
-          {/* Links */}
-          <ul className="flex items-center gap-0.5">
-            {navItems.map(({ label, path }) => {
-              const active = isActive(path);
-              const isLink = !path.startsWith("/#");
-
-              const content = (
-                <span className={`nav-link-item relative px-4 py-2 rounded-full text-sm font-body font-medium transition-all duration-200 block ${
-                  active
-                    ? "text-foreground bg-muted/60"
-                    : "text-muted-foreground hover:text-foreground"
-                }`}>
-                  {label}
-                  <span className="nav-link-glow" aria-hidden="true" />
-                </span>
-              );
-
-              return (
-                <li key={label}>
-                  {isLink ? (
-                    <Link to={path}>{content}</Link>
-                  ) : (
-                    <button onClick={() => handleClick(path)}>{content}</button>
-                  )}
-                </li>
-              );
-            })}
-          </ul>
-        </div>
-      </motion.nav>
-
-      {/* Mobile hamburger trigger */}
-      <motion.div
-        initial={{ y: -60, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="fixed top-4 right-4 z-[60] md:hidden"
-      >
-        <button
-          onClick={() => setMobileOpen(!mobileOpen)}
-          className="nav-capsule p-3 rounded-2xl"
-          aria-label={mobileOpen ? "Close menu" : "Open menu"}
-        >
-          {mobileOpen ? <X className="w-5 h-5 text-foreground" /> : <Menu className="w-5 h-5 text-foreground" />}
-        </button>
-      </motion.div>
-
-      {/* Mobile logo */}
-      <motion.div
-        initial={{ y: -60, opacity: 0 }}
-        animate={{ y: 0, opacity: 1 }}
-        transition={{ duration: 0.3, ease: "easeInOut" }}
-        className="fixed top-4 left-4 z-[60] md:hidden"
-      >
-        <Link to="/" className="nav-capsule flex items-center gap-1.5 px-4 py-3 rounded-2xl">
-          <span className="font-mono text-xs tracking-tight text-primary font-semibold">SA</span>
-          <span className="font-mono text-xs tracking-tight text-muted-foreground">//</span>
-          <span className="font-mono text-xs tracking-tight text-foreground">Sys-Atharva</span>
-        </Link>
-      </motion.div>
-
-      {/* Mobile fullscreen overlay */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            transition={{ duration: 0.25 }}
-            className="fixed inset-0 z-[55] md:hidden nav-mobile-overlay flex items-center justify-center"
-          >
-            <motion.ul
-              initial={{ scale: 0.9, opacity: 0 }}
-              animate={{ scale: 1, opacity: 1 }}
-              exit={{ scale: 0.9, opacity: 0 }}
-              transition={{ duration: 0.25, delay: 0.05 }}
-              className="flex flex-col items-center gap-3"
+    <motion.header
+      initial={{ y: -100, opacity: 0 }}
+      animate={{ y: 0, opacity: 1 }}
+      transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
+      className="fixed inset-x-0 top-4 z-50 flex justify-center px-4 pointer-events-none"
+    >
+      <nav className="pointer-events-auto flex w-full max-w-3xl items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-[#0B0F19]/90 px-5 py-3 backdrop-blur-md">
+        <a href="/#home" className="group flex items-center gap-2">
+          <span className="h-2.5 w-2.5 rounded-full bg-[#10B981] shadow-[0_0_12px_rgba(16,185,129,0.6)] transition-transform duration-300 group-hover:scale-125" />
+          <span className="font-display text-lg font-semibold tracking-tight text-foreground">
+            Atharva
+          </span>
+        </a>
+        <div className="hidden items-center gap-1 md:flex">
+          {navItems.map((item) => (
+            <a
+              key={item.name}
+              href={item.href}
+              className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-400 transition-colors hover:text-white"
             >
-              {navItems.map(({ icon: Icon, label, path }, i) => {
-                const active = isActive(path);
-                const isLink = !path.startsWith("/#");
-
-                const content = (
-                  <motion.div
-                    initial={{ y: 20, opacity: 0 }}
-                    animate={{ y: 0, opacity: 1 }}
-                    transition={{ delay: 0.1 + i * 0.06, duration: 0.3 }}
-                    className={`flex items-center gap-3 px-8 py-4 rounded-2xl text-lg font-display font-semibold transition-all duration-200 ${
-                      active
-                        ? "text-foreground bg-muted/40"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/20"
-                    }`}
-                  >
-                    <Icon className="w-5 h-5" />
-                    {label}
-                  </motion.div>
-                );
-
-                return (
-                  <li key={label}>
-                    {isLink ? (
-                      <Link to={path} onClick={() => setMobileOpen(false)}>{content}</Link>
-                    ) : (
-                      <button onClick={() => handleClick(path)}>{content}</button>
-                    )}
-                  </li>
-                );
-              })}
-            </motion.ul>
+              {item.name}
+            </a>
+          ))}
+        </div>
+        <button
+          onClick={() => setMenuOpen((v) => !v)}
+          className="p-1.5 text-foreground hover:bg-white/5 rounded-lg md:hidden"
+          aria-label="Toggle menu"
+        >
+          {menuOpen ? <X size={22} /> : <Menu size={22} />}
+        </button>
+      </nav>
+      <AnimatePresence>
+        {menuOpen && (
+          <motion.div
+            initial={{ opacity: 0, y: -10 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -10 }}
+            transition={{ duration: 0.25 }}
+            className="pointer-events-auto absolute left-4 right-4 top-20 z-50 flex flex-col gap-2 rounded-2xl border border-slate-800 bg-[#0B0F19]/95 p-4 backdrop-blur-md md:hidden"
+          >
+            {navItems.map((item) => (
+              <a
+                key={item.name}
+                href={item.href}
+                onClick={() => setMenuOpen(false)}
+                className="rounded-lg px-4 py-3 text-sm font-medium text-slate-400 transition-colors hover:bg-white/5 hover:text-white"
+              >
+                {item.name}
+              </a>
+            ))}
           </motion.div>
         )}
       </AnimatePresence>
-    </>
+    </motion.header>
   );
 };
 

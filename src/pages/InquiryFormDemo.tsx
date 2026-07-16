@@ -15,24 +15,20 @@ export default function InquiryFormDemo() {
       initial="hidden"
       animate="visible"
       variants={pageVariants}
-      className="min-h-screen bg-gradient-to-br from-[#0B0B0B] via-[#1A1A1A] to-[#0B0B0B] py-16 px-4"
+      className="min-h-screen bg-[#0B0F19] py-24 px-4"
     >
-      {/* Background Grid Effect */}
-      <div className="fixed inset-0 opacity-10">
-        <div className="absolute inset-0 bg-gradient-to-br from-[#A1A1A1] to-transparent" />
-      </div>
-
       <div className="relative z-10 max-w-4xl mx-auto">
         {/* Header Section */}
         <motion.div
-          initial={{ opacity: 0, y: -20 }}
+          initial={{ opacity: 0, y: -12 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.6 }}
+          transition={{ duration: 0.5 }}
           className="text-center mb-16"
         >
-          <h1 className="text-4xl md:text-5xl font-light text-[#A1A1A1] tracking-tight mb-4">
-            Inquiry Form
+          <h1 className="text-5xl md:text-6xl font-bold text-white tracking-tight mb-4">
+            Get in <span className="text-[#06B6D4]">Touch</span>
           </h1>
+          <p className="text-slate-400 max-w-md mx-auto">Bridging complex hardware systems and modern full-stack architectures.</p>
         </motion.div>
 
         {/* Form Container */}

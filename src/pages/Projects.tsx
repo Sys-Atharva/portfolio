@@ -2,9 +2,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import InteractiveBackdrop from "@/components/InteractiveBackdrop";
 import FloatingNav from "@/components/FloatingNav";
-import SpotlightCard from "@/components/SpotlightCard";
 import Footer from "@/components/Footer";
 
 const allProjects = [
@@ -24,11 +22,10 @@ const Projects = () => {
 
   return (
     <div className="relative min-h-screen">
-      <InteractiveBackdrop />
       <FloatingNav />
       <main className="relative z-10 pt-20 pb-8 px-6">
         <div className="max-w-6xl mx-auto">
-          <Link to="/" className="inline-flex items-center gap-1 text-muted-foreground hover:text-foreground text-sm mb-8 transition-colors">
+          <Link to="/" className="inline-flex items-center gap-1 text-slate-400 hover:text-white text-sm mb-8 transition-colors">
             <ArrowLeft className="w-4 h-4" /> Back
           </Link>
 
@@ -46,10 +43,10 @@ const Projects = () => {
               <button
                 key={f}
                 onClick={() => setActive(f)}
-                className={`px-4 py-2 rounded-xl text-sm font-body font-medium transition-all duration-200 ${
+                className={`px-4 py-2 rounded-xl text-sm font-body font-medium transition-colors ${
                   active === f
-                    ? "bg-primary/10 text-primary border border-primary/25"
-                    : "text-muted-foreground border border-border hover:text-foreground"
+                    ? "border border-[#10B981]/40 bg-[#10B981]/10 text-[#10B981]"
+                    : "border border-slate-800 text-slate-400 hover:text-white"
                 }`}
               >
                 {f}
@@ -59,24 +56,26 @@ const Projects = () => {
 
           <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {filtered.map((p, i) => (
-              <motion.div
+              <motion.a
                 key={p.title}
+                href="https://github.com/Sys-Atharva"
+                target="_blank"
+                rel="noopener noreferrer"
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.3, delay: i * 0.06 }}
                 layout
+                className="group rounded-lg border border-slate-800 bg-slate-900/40 p-6 transition-colors hover:border-slate-700"
               >
-                <SpotlightCard href="https://github.com/Sys-Atharva">
-                  <span className={`text-xs font-body font-medium tracking-wider uppercase ${
-                    p.category === "Software" ? "text-primary" : "text-secondary"
-                  }`}>
-                    {p.category}
-                  </span>
-                  <h3 className="font-display text-lg font-semibold mt-2 mb-1">{p.title}</h3>
-                  <p className="text-muted-foreground text-sm font-body">{p.desc}</p>
-                  <ArrowUpRight className="w-4 h-4 text-muted-foreground mt-3" />
-                </SpotlightCard>
-              </motion.div>
+                <span className={`text-xs font-body font-medium tracking-wider uppercase ${
+                  p.category === "Software" ? "text-[#10B981]" : "text-[#06B6D4]"
+                }`}>
+                  {p.category}
+                </span>
+                <h3 className="font-display text-lg font-semibold mt-2 mb-1">{p.title}</h3>
+                <p className="text-slate-400 text-sm font-body">{p.desc}</p>
+                <ArrowUpRight className="w-4 h-4 text-slate-500 mt-3 transition-colors group-hover:text-[#10B981]" />
+              </motion.a>
             ))}
           </div>
         </div>

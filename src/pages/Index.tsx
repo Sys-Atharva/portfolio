@@ -1,4 +1,3 @@
-import InteractiveBackdrop from "@/components/InteractiveBackdrop";
 import FloatingNav from "@/components/FloatingNav";
 import HeroSection from "@/components/HeroSection";
 import AboutSection from "@/components/AboutSection";
@@ -10,7 +9,6 @@ import Footer from "@/components/Footer";
 const Index = () => {
   return (
     <div className="relative min-h-screen">
-      <InteractiveBackdrop />
       <FloatingNav />
       <main className="relative z-10">
         <HeroSection />
