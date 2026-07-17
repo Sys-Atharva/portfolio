@@ -1,20 +1,16 @@
-import { useState } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { SpotlightCard } from "@/components/SpotlightCard";
 
 const projects = [
-  { title: "Web Dashboard", category: "Software", desc: "Full-stack analytics dashboard with real-time data." },
-  { title: "Signal Processor", category: "Hardware", desc: "FPGA-based digital signal processing pipeline." },
-  { title: "Mobile App", category: "Software", desc: "Cross-platform mobile application with Firebase." },
-  { title: "Circuit Simulator", category: "Hardware", desc: "Interactive circuit analysis and simulation tool." },
+  { title: "Web Dashboard", category: "Web Applications", desc: "Full-stack analytics dashboard with real-time data visualization.", featured: true },
+  { title: "Signal Processor", category: "Embedded Systems & IoT", desc: "FPGA-based digital signal processing pipeline." },
+  { title: "Mobile App", category: "Mobile & Cross-Platform", desc: "Cross-platform mobile application with Firebase." },
+  { title: "Circuit Simulator", category: "Web Applications", desc: "Interactive circuit analysis and simulation tool." },
 ];
 
 const PortfolioPreview = () => {
-  const [flipped, setFlipped] = useState<Record<number, boolean>>({});
-
-  const toggleFlip = (i: number) => setFlipped((prev) => ({ ...prev, [i]: !prev[i] }));
+  const reduce = useReducedMotion();
 
   return (
     <section id="portfolio" className="py-24 px-6">
@@ -42,87 +38,66 @@ const PortfolioPreview = () => {
           </div>
           <Link
             to="/projects"
-            className="hidden sm:flex items-center gap-1 text-[#10B981] text-sm font-medium hover:underline"
+            className="hidden sm:flex items-center gap-1 text-crimson text-sm font-medium hover:underline"
           >
             View All <ArrowUpRight className="w-4 h-4" />
           </Link>
         </div>
 
-        <div className="grid sm:grid-cols-2 gap-4">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {projects.map((p, i) => (
-            <SpotlightCard
+            <motion.a
               key={p.title}
-              variant={p.category === "Software" ? "emerald" : "teal"}
-              className="rounded-lg"
+              href="https://github.com/Sys-Atharva"
+              target="_blank"
+              rel="noopener noreferrer"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-80px" }}
+              transition={{ duration: 0.3, delay: i * 0.08 }}
+              whileHover={reduce ? undefined : { scale: 1.02 }}
+              className={`group relative rounded-lg border border-slate-800 bg-slate-900/40 overflow-hidden transition-colors duration-300 hover:border-crimson will-change-transform ${
+                p.featured ? "md:col-span-2 md:row-span-2" : ""
+              }`}
             >
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: "-80px" }}
-                transition={{ duration: 0.3, delay: i * 0.08 }}
-                className="relative [perspective:1200px]"
-              >
-                <motion.div
-                  className="relative w-full [transform-style:preserve-3d] transition-transform duration-500"
-                  style={{ transform: flipped[i] ? "rotateY(180deg)" : "rotateY(0deg)" }}
-                >
-                  <a
-                    href="https://github.com/Sys-Atharva"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="group block rounded-lg border border-slate-800 bg-slate-900/40 p-6 transition-colors duration-300 hover:border-[#10B981] will-change-transform [backface-visibility:hidden]"
-                  >
-                    <span className={`text-xs font-body font-medium tracking-wider uppercase ${
-                      p.category === "Software" ? "text-[#10B981]" : "text-[#06B6D4]"
-                    }`}>
-                      {p.category}
-                    </span>
-                    <h3 className="font-display text-lg font-semibold mt-2 mb-1">{p.title}</h3>
-                    <p className="text-slate-400 text-sm font-body">{p.desc}</p>
-                    <ArrowUpRight className="w-4 h-4 text-slate-500 mt-3 transition-colors group-hover:text-[#10B981]" />
-                    <button
-                      onClick={(e) => { e.preventDefault(); toggleFlip(i); }}
-                      className="absolute bottom-3 right-3 text-[10px] text-slate-600 hover:text-white uppercase tracking-widest transition-colors"
-                    >
-                      Details
-                    </button>
-                  </a>
+              <div className={`p-6 ${p.featured ? "md:p-10" : ""}`}>
+                <span className={`text-xs font-body font-medium tracking-wider uppercase ${
+                  p.category === "Embedded Systems & IoT" ? "text-crimson-light" : "text-crimson"
+                }`}>
+                  {p.category}
+                </span>
+                <h3 className={`font-display font-semibold mt-2 mb-1 text-white ${p.featured ? "text-2xl md:text-3xl" : "text-lg"}`}>
+                  {p.title}
+                </h3>
+                <p className="text-slate-400 text-sm font-body">{p.desc}</p>
+              </div>
 
-                  <div className="absolute inset-0 rounded-lg border border-slate-800 bg-slate-900/40 p-6 [backface-visibility:hidden] [transform:rotateY(180deg)] flex flex-col justify-between">
-                    <div>
-                      <span className={`text-xs font-body font-medium tracking-wider uppercase mb-3 block ${
-                        p.category === "Software" ? "text-[#10B981]" : "text-[#06B6D4]"
-                      }`}>
-                        Tech Stack
-                      </span>
-                      <h3 className="font-display text-lg font-semibold mb-2">{p.title}</h3>
-                      <div className="flex flex-wrap gap-1.5">
-                        {(p.category === "Software"
-                          ? ["React", "TypeScript", "Node.js", "Firebase"]
-                          : ["Verilog", "FPGA", "C", "Signal Processing"]
-                        ).map((t) => (
-                          <span key={t} className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/5 text-slate-400 border border-slate-800">
-                            {t}
-                          </span>
-                        ))}
-                      </div>
-                    </div>
-                    <button
-                      onClick={() => toggleFlip(i)}
-                      className="self-end text-[10px] text-slate-600 hover:text-white uppercase tracking-widest transition-colors mt-4"
-                    >
-                      Back
-                    </button>
-                  </div>
-                </motion.div>
-              </motion.div>
-            </SpotlightCard>
+              <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-end p-6">
+                <div className="flex items-center gap-2">
+                  <span className="text-white text-sm font-medium">View Project</span>
+                  <ArrowUpRight className="w-4 h-4 text-crimson" />
+                </div>
+              </div>
+
+              <div className="absolute top-4 right-4 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex flex-wrap gap-1 justify-end">
+                {(p.featured
+                  ? ["React", "TypeScript", "Node.js", "Firebase"]
+                  : p.category === "Embedded Systems & IoT"
+                  ? ["Verilog", "FPGA", "C"]
+                  : ["React", "TypeScript"]
+                ).map((t) => (
+                  <span key={t} className="px-2 py-0.5 rounded text-[10px] font-mono bg-white/10 text-slate-300 backdrop-blur-sm">
+                    {t}
+                  </span>
+                ))}
+              </div>
+            </motion.a>
           ))}
         </div>
 
         <Link
           to="/projects"
-          className="sm:hidden flex items-center justify-center gap-1 text-[#10B981] text-sm font-medium mt-6 hover:underline"
+          className="sm:hidden flex items-center justify-center gap-1 text-crimson text-sm font-medium mt-6 hover:underline"
         >
           View All <ArrowUpRight className="w-4 h-4" />
         </Link>

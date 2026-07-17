@@ -33,7 +33,7 @@ Persistent record of project facts, decisions, and active state. Updated as the 
 ## Animation Primitives (src/components/)
 
 - `SpotlightCard.tsx` — cursor-tracking spotlight (`useMotionValue`+`useSpring`+`useMotionTemplate`, `--x`/`--y` vars, `variant: emerald|teal`) + 3D parallax tilt (`perspective:800`, `preserve-3d`, `rotateX/rotateY` springs ±8deg, inner `translate3d(0,0,20px)` on hover). **Mobile bypass:** `useHasHover()` (imported from `@/lib/useHasHover`) disables pointer math on touch; `whileTap` scale fallback. Used in DualCoreSection + PortfolioPreview.
-- `Magnetic.tsx` — magnetic CTA (`max` px toward cursor, `spring(150,15)`, springs back on leave). Used on Hero CTAs + InquiryForm submit.
+- `Magnetic.tsx` — magnetic CTA (`max` px toward cursor, `spring(150,15)`, springs back on leave). Uses `useReducedMotion()` for instant snap when reduced. Uses `useHasHover()` to skip spring math on touch. Used on Hero CTAs + InquiryForm submit.
 - `NavDepth.tsx` — scroll-driven 3D depth on nav pill (`useScroll` → `useTransform` → `useSpring` for `rotateY ±6°`). Desktop-only via `useHasHover()`. Wraps `<nav>` in `FloatingNav.tsx`.
 - `src/lib/useHasHover.ts` — shared `matchMedia('(hover: hover)')` hook, used by `SpotlightCard` + `NavDepth`.
 - Nav 3D cylinder roll: pure-CSS `.cyl-link` in `index.css` (two stacked faces, `rotateX -90deg` on hover, GPU `transform` only). Desktop-only in `FloatingNav.tsx`.
@@ -44,13 +44,13 @@ Persistent record of project facts, decisions, and active state. Updated as the 
 
 ## Key Components
 
-- `HeroSection.tsx` — 3D split-text char reveal (`rotateX`, `staggerChildren: 0.02`), CTAs wrapped in `Magnetic`. `HeroTelemetry` SVG has scroll-driven speed + rotation.
+- `HeroSection.tsx` — 3D split-text char reveal (`rotateX`, `staggerChildren: 0.02`) with gradient text (`bg-gradient-to-r from-[#10B981] to-[#06B6D4] bg-clip-text text-transparent`), CTAs wrapped in `Magnetic`. `HeroTelemetry` SVG has scroll-driven speed + rotation.
 - `AboutSection.tsx` — staggered content reveal, `viewport once + margin -80px`.
 - `DualCoreSection.tsx` — skills grid, `SpotlightCard` wrappers, staggered scale/opacity. Heading has scroll-driven 3D tilt (`rotateX ±12°` + `y ±40px`).
-- `PortfolioPreview.tsx` — project cards, `SpotlightCard` + 3D card flip (click "Details" → `rotateY(180deg)` reveals tech stack).
+- `PortfolioPreview.tsx` — project cards, `SpotlightCard` + 3D card flip (click "Details" → `rotateY(180deg)` reveals tech stack). Categories: Embedded Systems & IoT, Web Applications, Creative Development, Mobile & Cross-Platform.
 - `ContactSection.tsx` — staggered CTA reveal.
 - `InquiryForm.tsx` — **Firestore + Zod logic is sacred**: `inquirySchema`, `db.addDoc`, Pabbly webhook must stay intact. Submit button wrapped in `Magnetic`.
-- `FloatingNav.tsx` — all internal links are React Router `<Link>` (logo + 4 nav items desktop/mobile); wrapped in `NavDepth` for scroll-driven 3D depth; nav row uses `.cyl-link` 3D cylinder roll on desktop. External links stay raw `<a>`.
+- `FloatingNav.tsx` — all internal links are React Router `<Link>` (logo + 4 nav items desktop/mobile); wrapped in `NavDepth` for scroll-driven 3D depth; nav row uses `.cyl-link` 3D cylinder roll on desktop. External links stay raw `<a>`. **Sliding pill indicator** via `motion.div` with `layoutId="nav-pill"` / `"nav-pill-mobile"` tracking active route via `useLocation()`.
 - `NavDepth.tsx` — scroll-driven 3D depth wrapper for nav (`useScroll` → `useTransform` → `useSpring` for `rotateY ±6°`). Desktop-only via `useHasHover()`.
 - `src/lib/useHasHover.ts` — shared `matchMedia('(hover: hover)')` hook for mobile bypass.
 
@@ -71,12 +71,16 @@ Phased rollout using global skills (`react-best-practices`, `frontend-design`, `
 | 3. 2D Micro-FX & Vector Depth | `HeroTelemetry` inline SVG, `.telemetry-dash` CSS keyframe (stroke-dashoffset), `animate-pulse`; CSS-only | ✅ Done (HeroSection, index.css) |
 | 4. Immersive 3D Spatial Transforms | `SpotlightCard` 3D tilt (±8deg, mobile bypass `useHasHover`), `.cyl-link` CSS cylinder roll | ✅ Done (SpotlightCard, FloatingNav, index.css) |
 | 5. Scroll-Driven 3D Depth | `NavDepth` scroll rotateY on nav, `DualCoreSection` scroll-tilt heading, `HeroTelemetry` scroll-driven speed/rotation, `PortfolioPreview` 3D card flip | ✅ Done (NavDepth, DualCoreSection, HeroSection, PortfolioPreview) |
+| 6. Accessibility & Refinement | `useReducedMotion()` on all 8 spring components + stagger patterns; CSS `@media` guards for `.telemetry-dash`/`.cyl-link`; `useHasHover` touch guard on `Magnetic`; sliding pill nav indicator (`layoutId`) | ✅ Done (SpotlightCard, Magnetic, NavDepth, DualCoreSection, ContactSection, PortfolioPreview, FloatingNav, HeroSection, index.css) |
+| 7. PRD Polish & Bug Fixes | Hero gradient text (emerald→teal `bg-clip-text`); 404 route fix (`Link` not `<a>`); `/inquiry` page gets FloatingNav + Footer; project categories updated (Embedded Systems & IoT, Web Applications, Creative Development, Mobile & Cross-Platform) | ✅ Done (HeroSection, NotFound, InquiryFormDemo, Projects, PortfolioPreview) |
 
 Final verification: `npm run lint` (0 errors) + `npm run build` (clean). All GPU-accelerated, 60fps target.
 
 ## Known Gaps / TODO
 
-- No `prefers-reduced-motion` guard on custom `useSpring` motion (accessibility).
+- ~~No `prefers-reduced-motion` guard on custom `useSpring` motion (accessibility).~~ ✅ Fixed — all 8 spring components + stagger patterns use `useReducedMotion()`; CSS `@media` guards in `index.css`.
+- ~~404 route bug (`<a href>` not respecting basename).~~ ✅ Fixed — now uses React Router `<Link>`.
+- ~~`/inquiry` page missing FloatingNav + Footer.~~ ✅ Fixed — both components added.
 - No vitest test files exist (`src/test/setup.ts` only) — no automated E2E/unit coverage.
 - `INQUIRY_FORM_DOCS.md` is stale (refs removed react-hook-form) — ignore.
 - Bundle >500kB (no code-splitting yet).

@@ -52,6 +52,10 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        crimson: {
+          DEFAULT: "#DC2626",
+          light: "#F87171",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

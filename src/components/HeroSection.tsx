@@ -1,14 +1,14 @@
-import { useRef } from "react";
-import { motion, useScroll, useTransform, type MotionValue } from "framer-motion";
+import { useRef, useMemo } from "react";
+import { motion, useScroll, useTransform, useReducedMotion, type MotionValue } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { Magnetic } from "@/components/Magnetic";
 
-const titleLines = ["ATHARVA", "AKASH"];
+const titleLines = ["ATHARVA", "PURVAT"];
 
 const HeroTelemetry = ({ speed }: { speed: MotionValue<number> }) => {
-  const emerald = "#10B981";
-  const teal = "#06B6D4";
+  const crimson = "#DC2626";
+  const crimsonLight = "#F87171";
   const dashOffset1 = useTransform(speed, [0.3, 1], [0, -28]);
   const dashOffset2 = useTransform(speed, [0.3, 1], [0, -28]);
   const nodes: [number, number, boolean][] = [
@@ -24,7 +24,7 @@ const HeroTelemetry = ({ speed }: { speed: MotionValue<number> }) => {
       preserveAspectRatio="xMidYMid slice"
       fill="none"
     >
-      <g stroke={teal} strokeWidth={1}>
+      <g stroke={crimsonLight} strokeWidth={1}>
         <line x1={80} y1={120} x2={240} y2={80} />
         <line x1={240} y1={80} x2={400} y2={160} />
         <line x1={400} y1={160} x2={560} y2={100} />
@@ -37,32 +37,26 @@ const HeroTelemetry = ({ speed }: { speed: MotionValue<number> }) => {
         style={{ strokeDashoffset: dashOffset1 }}
         className="telemetry-dash"
         x1={160} y1={300} x2={360} y2={280}
-        stroke={emerald} strokeWidth={1.5}
+        stroke={crimson} strokeWidth={1.5}
       />
       <motion.line
         style={{ strokeDashoffset: dashOffset2 }}
         className="telemetry-dash"
         x1={320} y1={460} x2={520} y2={500}
-        stroke={emerald} strokeWidth={1.5}
+        stroke={crimson} strokeWidth={1.5}
       />
-      {/* nodes */}
       {nodes.map(([x, y, pulse], i) => (
         <circle
           key={i}
           cx={x}
           cy={y}
           r={pulse ? 4 : 2.5}
-          fill={pulse ? emerald : teal}
+          fill={pulse ? crimson : crimsonLight}
           className={pulse ? "animate-pulse" : undefined}
         />
       ))}
     </svg>
   );
-};
-
-const charContainer = {
-  hidden: {},
-  show: { transition: { staggerChildren: 0.02 } },
 };
 
 const charItem = {
@@ -76,13 +70,20 @@ const charItem = {
 };
 
 const HeroSection = () => {
+  const reduce = useReducedMotion();
+  const charContainer = useMemo(() => ({
+    hidden: {},
+    show: { transition: { staggerChildren: reduce ? 0 : 0.03 } },
+  }), [reduce]);
   const ref = useRef<HTMLElement>(null);
+  const portraitRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({ target: ref, offset: ["start start", "end start"] });
   const dashSpeed = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
   const svgRotate = useTransform(scrollYProgress, [0, 1], [0, 5]);
+  const portraitY = useTransform(scrollYProgress, [0, 1], [0, 15]);
 
   return (
-    <section ref={ref} className="relative min-h-screen flex items-center px-8 bg-[#0B0F19] overflow-hidden">
+    <section ref={ref} id="home" className="relative min-h-screen flex items-center px-8 bg-background overflow-hidden">
       <motion.div
         className="absolute inset-0 -z-10"
         style={{ rotate: svgRotate, willChange: "transform" }}
@@ -95,12 +96,12 @@ const HeroSection = () => {
           initial={{ opacity: 0, y: 12 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.5 }}
-          className="lg:col-span-9 space-y-8"
+          className="lg:col-span-7 space-y-8"
         >
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-slate-800 bg-slate-900/50 text-[#10B981] text-xs font-semibold tracking-widest uppercase">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-muted/50 text-crimson text-xs font-semibold tracking-widest uppercase">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#10B981] opacity-75" />
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#10B981]" />
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-crimson opacity-75" />
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-crimson" />
             </span>
             Available for select projects
           </div>
@@ -120,7 +121,7 @@ const HeroSection = () => {
                   <motion.span
                     key={i}
                     variants={charItem}
-                    className="inline-block will-change-[transform]"
+                    className="inline-block will-change-[transform] bg-gradient-to-r from-crimson to-crimson-light bg-clip-text text-transparent"
                   >
                     {ch}
                   </motion.span>
@@ -137,7 +138,7 @@ const HeroSection = () => {
           <div className="flex flex-wrap gap-4 pt-4">
             <Magnetic as="button"
               onClick={() => document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" })}
-              className="bg-[#10B981] hover:bg-[#0da673] text-white px-8 py-4 rounded-lg font-bold uppercase tracking-widest text-xs transition-colors duration-300 flex items-center gap-2"
+              className="bg-crimson hover:bg-crimson-light text-white px-8 py-4 rounded-lg font-bold uppercase tracking-widest text-xs transition-colors duration-300 flex items-center gap-2"
             >
               View Works
               <ArrowRight className="w-4 h-4" />
@@ -150,6 +151,27 @@ const HeroSection = () => {
                 Contact Me
               </Link>
             </Magnetic>
+          </div>
+        </motion.div>
+
+        <motion.div
+          ref={portraitRef}
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6, delay: 0.2 }}
+          style={{ y: portraitY, willChange: "transform" }}
+          className="lg:col-span-5 hidden lg:flex items-center justify-center"
+        >
+          <div className="relative w-80 h-80 rounded-2xl border border-border bg-muted/30 overflow-hidden">
+            <div className="absolute inset-0 bg-gradient-to-br from-crimson/10 via-transparent to-crimson-light/5" />
+            <div className="absolute inset-0 flex items-center justify-center">
+              <div className="text-center">
+                <div className="w-20 h-20 rounded-full bg-crimson/10 border border-crimson/30 flex items-center justify-center mx-auto mb-4">
+                  <span className="text-3xl font-display font-bold text-crimson">AP</span>
+                </div>
+                <p className="text-sm text-slate-500 font-mono">Portrait</p>
+              </div>
+            </div>
           </div>
         </motion.div>
       </div>

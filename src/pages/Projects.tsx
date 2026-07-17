@@ -6,15 +6,15 @@ import FloatingNav from "@/components/FloatingNav";
 import Footer from "@/components/Footer";
 
 const allProjects = [
-  { title: "Web Dashboard", category: "Software", desc: "Full-stack analytics dashboard with real-time data visualization." },
-  { title: "Mobile App", category: "Software", desc: "Cross-platform mobile application powered by Firebase." },
-  { title: "API Gateway", category: "Software", desc: "RESTful API design with authentication and rate limiting." },
-  { title: "Signal Processor", category: "Hardware", desc: "FPGA-based digital signal processing pipeline." },
-  { title: "Circuit Simulator", category: "Hardware", desc: "Interactive circuit analysis and simulation tool." },
-  { title: "Embedded Controller", category: "Hardware", desc: "Microcontroller-based automation system with sensor integration." },
+  { title: "Web Dashboard", category: "Web Applications", desc: "Full-stack analytics dashboard with real-time data visualization." },
+  { title: "Mobile App", category: "Mobile & Cross-Platform", desc: "Cross-platform mobile application powered by Firebase." },
+  { title: "API Gateway", category: "Web Applications", desc: "RESTful API design with authentication and rate limiting." },
+  { title: "Signal Processor", category: "Embedded Systems & IoT", desc: "FPGA-based digital signal processing pipeline." },
+  { title: "Circuit Simulator", category: "Web Applications", desc: "Interactive circuit analysis and simulation tool." },
+  { title: "Embedded Controller", category: "Embedded Systems & IoT", desc: "Microcontroller-based automation system with sensor integration." },
 ];
 
-const filters = ["All", "Software", "Hardware"] as const;
+const filters = ["All", "Embedded Systems & IoT", "Web Applications", "Creative Development", "Mobile & Cross-Platform"] as const;
 
 const Projects = () => {
   const [active, setActive] = useState<typeof filters[number]>("All");
@@ -38,14 +38,14 @@ const Projects = () => {
             All Projects
           </motion.h1>
 
-          <div className="flex gap-2 mb-10">
+          <div className="flex flex-wrap gap-2 mb-10">
             {filters.map((f) => (
               <button
                 key={f}
                 onClick={() => setActive(f)}
                 className={`px-4 py-2 rounded-xl text-sm font-body font-medium transition-colors ${
                   active === f
-                    ? "border border-[#10B981]/40 bg-[#10B981]/10 text-[#10B981]"
+                    ? "border border-crimson/40 bg-crimson/10 text-crimson"
                     : "border border-slate-800 text-slate-400 hover:text-white"
                 }`}
               >
@@ -68,13 +68,13 @@ const Projects = () => {
                 className="group rounded-lg border border-slate-800 bg-slate-900/40 p-6 transition-colors hover:border-slate-700"
               >
                 <span className={`text-xs font-body font-medium tracking-wider uppercase ${
-                  p.category === "Software" ? "text-[#10B981]" : "text-[#06B6D4]"
+                  p.category === "Embedded Systems & IoT" ? "text-crimson-light" : p.category === "Creative Development" ? "text-purple-400" : p.category === "Mobile & Cross-Platform" ? "text-amber-400" : "text-crimson"
                 }`}>
                   {p.category}
                 </span>
                 <h3 className="font-display text-lg font-semibold mt-2 mb-1">{p.title}</h3>
                 <p className="text-slate-400 text-sm font-body">{p.desc}</p>
-                <ArrowUpRight className="w-4 h-4 text-slate-500 mt-3 transition-colors group-hover:text-[#10B981]" />
+                <ArrowUpRight className="w-4 h-4 text-slate-500 mt-3 transition-colors group-hover:text-crimson" />
               </motion.a>
             ))}
           </div>

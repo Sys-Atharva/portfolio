@@ -1,28 +1,29 @@
 import { useRef, type ReactNode, type MouseEvent } from "react";
-import { motion, useMotionValue, useSpring, useMotionTemplate } from "framer-motion";
+import { motion, useMotionValue, useSpring, useMotionTemplate, useReducedMotion } from "framer-motion";
 import { useHasHover } from "@/lib/useHasHover";
 
 type SpotlightCardProps = {
   children: ReactNode;
   className?: string;
-  variant?: "emerald" | "teal";
+  variant?: "crimson" | "neutral";
 };
 
 const gradients = {
-  emerald: "radial-gradient(600px circle at var(--x) var(--y), rgba(16,185,129,0.08), transparent 40%)",
-  teal: "radial-gradient(600px circle at var(--x) var(--y), rgba(6,182,212,0.08), transparent 40%)",
+  crimson: "radial-gradient(600px circle at var(--x) var(--y), rgba(220,38,38,0.08), transparent 40%)",
+  neutral: "radial-gradient(600px circle at var(--x) var(--y), rgba(255,255,255,0.04), transparent 40%)",
 };
 
-export function SpotlightCard({ children, className, variant = "emerald" }: SpotlightCardProps) {
+export function SpotlightCard({ children, className, variant = "crimson" }: SpotlightCardProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
   const mx = useMotionValue(50);
   const my = useMotionValue(50);
-  const sx = useSpring(mx, { stiffness: 200, damping: 30 });
-  const sy = useSpring(my, { stiffness: 200, damping: 30 });
+  const sx = useSpring(mx, { stiffness: reduce ? 9999 : 200, damping: reduce ? 9999 : 30 });
+  const sy = useSpring(my, { stiffness: reduce ? 9999 : 200, damping: reduce ? 9999 : 30 });
   const rx = useMotionValue(0);
   const ry = useMotionValue(0);
-  const srx = useSpring(rx, { stiffness: 200, damping: 30 });
-  const sry = useSpring(ry, { stiffness: 200, damping: 30 });
+  const srx = useSpring(rx, { stiffness: reduce ? 9999 : 200, damping: reduce ? 9999 : 30 });
+  const sry = useSpring(ry, { stiffness: reduce ? 9999 : 200, damping: reduce ? 9999 : 30 });
   const bg = useMotionTemplate`${gradients[variant]}`;
   const hasHover = useHasHover();
 

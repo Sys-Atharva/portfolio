@@ -1,8 +1,11 @@
 import FloatingNav from "@/components/FloatingNav";
 import HeroSection from "@/components/HeroSection";
-import AboutSection from "@/components/AboutSection";
-import DualCoreSection from "@/components/DualCoreSection";
+import TechMarquee from "@/components/TechMarquee";
+import ValueProps from "@/components/ValueProps";
 import PortfolioPreview from "@/components/PortfolioPreview";
+import ExperienceTimeline from "@/components/ExperienceTimeline";
+import VideoSection from "@/components/VideoSection";
+import Testimonials from "@/components/Testimonials";
 import ContactSection from "@/components/ContactSection";
 import Footer from "@/components/Footer";
 
@@ -12,9 +15,12 @@ const Index = () => {
       <FloatingNav />
       <main className="relative z-10">
         <HeroSection />
-        <AboutSection />
-        <DualCoreSection />
+        <TechMarquee />
+        <ValueProps />
         <PortfolioPreview />
+        <ExperienceTimeline />
+        <VideoSection />
+        <Testimonials />
         <ContactSection />
         <Footer />
       </main>

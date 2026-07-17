@@ -1,5 +1,6 @@
 import { useRef, type ReactNode, type MouseEvent } from "react";
-import { motion, useMotionValue, useSpring } from "framer-motion";
+import { motion, useMotionValue, useSpring, useReducedMotion } from "framer-motion";
+import { useHasHover } from "@/lib/useHasHover";
 
 type MagneticProps = {
   children: ReactNode;
@@ -11,14 +12,16 @@ type MagneticProps = {
 
 export function Magnetic({ children, className, max = 10, as = "div", ...rest }: MagneticProps) {
   const ref = useRef<HTMLDivElement>(null);
+  const reduce = useReducedMotion();
+  const hasHover = useHasHover();
   const x = useMotionValue(0);
   const y = useMotionValue(0);
-  const sx = useSpring(x, { stiffness: 150, damping: 15 });
-  const sy = useSpring(y, { stiffness: 150, damping: 15 });
+  const sx = useSpring(x, { stiffness: reduce ? 9999 : 150, damping: reduce ? 9999 : 15 });
+  const sy = useSpring(y, { stiffness: reduce ? 9999 : 150, damping: reduce ? 9999 : 15 });
 
   const handleMove = (e: MouseEvent) => {
     const el = ref.current;
-    if (!el) return;
+    if (!el || !hasHover()) return;
     const r = el.getBoundingClientRect();
     x.set(((e.clientX - r.left) / r.width - 0.5) * 2 * max);
     y.set(((e.clientY - r.top) / r.height - 0.5) * 2 * max);

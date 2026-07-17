@@ -22,7 +22,7 @@ function capitalizeName(name: string): string {
 function borderClass(error?: string): string {
   return error
     ? 'border-red-500/50 focus:border-red-400'
-    : 'border-slate-800 focus:border-[#06B6D4]';
+    : 'border-slate-800 focus:border-crimson-light';
 }
 
 export function InquiryForm() {
@@ -78,7 +78,7 @@ export function InquiryForm() {
   };
 
   const inputClass = (field: keyof InquiryData) =>
-    `w-full px-4 py-3 bg-slate-900 border rounded-lg text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-[#06B6D4] transition-colors duration-300 ${borderClass(errors[field])}`;
+    `w-full px-4 py-3 bg-slate-900 border rounded-lg text-white placeholder-slate-600 focus:outline-none focus:ring-1 focus:ring-crimson-light transition-colors duration-300 ${borderClass(errors[field])}`;
 
   const fields: { key: keyof InquiryData; label: string; type: string; placeholder: string; span: 1 | 2 }[] = [
     { key: 'fullName', label: 'Full Name', type: 'text', placeholder: 'John Doe', span: 1 },
@@ -94,8 +94,8 @@ export function InquiryForm() {
       <div className="relative">
         <div className="relative bg-slate-900/30 rounded-2xl p-8 md:p-12 border border-slate-800 shadow-2xl">
           <div className="mb-8">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-slate-800 bg-slate-900/50 text-[#10B981] text-xs font-semibold tracking-wider uppercase mb-4">
-              <span className="w-2 h-2 rounded-full bg-[#10B981] animate-pulse" />
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-slate-800 bg-slate-900/50 text-crimson text-xs font-semibold tracking-wider uppercase mb-4">
+              <span className="w-2 h-2 rounded-full bg-crimson animate-pulse" />
               Available for Collaboration
             </div>
             <h2 className="text-2xl md:text-3xl font-bold text-white tracking-tight">Send a Message</h2>
@@ -123,7 +123,7 @@ export function InquiryForm() {
 
             <div className="sm:col-span-2 pt-2">
               <Magnetic as="button" type="submit" disabled={isSubmitting || !isFormValid()}
-                className="w-full px-6 py-4 bg-[#10B981] hover:bg-[#0da673] hover:shadow-lg hover:shadow-[#10B981]/20 text-[#0B0F19] font-bold rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]">
+                className="w-full px-6 py-4 bg-crimson hover:bg-crimson-light hover:shadow-lg hover:shadow-crimson/20 text-white font-bold rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]">
                 {isSubmitting ? 'Sending...' : 'Send Message'}
               </Magnetic>
             </div>

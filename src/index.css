@@ -6,45 +6,45 @@
 
 @layer base {
   :root {
-    --background: 222 47% 7%;
-    --foreground: 210 20% 98%;
+    --background: 0 0% 4%;
+    --foreground: 0 0% 98%;
 
-    --card: 222 30% 10%;
-    --card-foreground: 210 20% 98%;
+    --card: 0 0% 8%;
+    --card-foreground: 0 0% 98%;
 
-    --popover: 222 30% 10%;
-    --popover-foreground: 210 20% 98%;
+    --popover: 0 0% 8%;
+    --popover-foreground: 0 0% 98%;
 
-    --primary: 160 84% 39%;
-    --primary-foreground: 222 47% 7%;
+    --primary: 0 72% 51%;
+    --primary-foreground: 0 0% 100%;
 
-    --secondary: 188 84% 43%;
-    --secondary-foreground: 222 47% 7%;
+    --secondary: 0 84% 73%;
+    --secondary-foreground: 0 0% 100%;
 
-    --muted: 215 28% 17%;
-    --muted-foreground: 215 20% 65%;
+    --muted: 0 0% 15%;
+    --muted-foreground: 0 0% 65%;
 
-    --accent: 215 28% 17%;
-    --accent-foreground: 210 20% 98%;
+    --accent: 0 0% 15%;
+    --accent-foreground: 0 0% 98%;
 
     --destructive: 0 84% 60%;
-    --destructive-foreground: 210 20% 98%;
+    --destructive-foreground: 0 0% 98%;
 
-    --border: 215 28% 17%;
-    --input: 215 28% 17%;
-    --ring: 160 84% 39%;
+    --border: 0 0% 15%;
+    --input: 0 0% 15%;
+    --ring: 0 72% 51%;
 
     --radius: 1rem;
 
     --font-display: 'Space Grotesk', sans-serif;
     --font-body: 'Inter', sans-serif;
 
-    /* Digital Studio design DNA */
-    --studio-bg: #0B0F19;
-    --studio-bg-elevated: #090D16;
-    --studio-border: #1E293B;
-    --studio-emerald: #10B981;
-    --studio-teal: #06B6D4;
+    /* Crimson design DNA */
+    --studio-bg: #0A0A0A;
+    --studio-bg-elevated: #141414;
+    --studio-border: #262626;
+    --studio-crimson: #DC2626;
+    --studio-crimson-light: #F87171;
   }
 }
 
@@ -55,7 +55,7 @@
 
   body {
     @apply text-foreground font-body antialiased;
-    background-color: #0B0F19;
+    background-color: hsl(var(--background));
   }
 
   h1, h2, h3, h4, h5, h6 {
@@ -102,5 +102,34 @@
   .telemetry-dash {
     stroke-dasharray: 4 6;
     animation: telemetry-dash 1.4s linear infinite;
+  }
+
+  @keyframes marquee {
+    0% { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+
+  .animate-marquee {
+    animation: marquee 20s linear infinite;
+  }
+
+  .animate-marquee:hover {
+    animation-play-state: paused;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .telemetry-dash {
+    animation-play-state: paused;
+  }
+  .cyl-link__inner {
+    transition: none;
+  }
+  .cyl-link:hover .cyl-link__inner,
+  .cyl-link:focus-visible .cyl-link__inner {
+    transform: none;
+  }
+  .animate-marquee {
+    animation-play-state: paused;
   }
 }
