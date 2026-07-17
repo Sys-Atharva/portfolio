@@ -35,7 +35,7 @@ const ContactSection = () => {
           <motion.div variants={contactItem}>
             <Link
               to="/inquiry"
-              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-[#10B981] text-[#0B0F19] font-display font-semibold text-sm tracking-wide transition-all duration-200 hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2 px-8 py-3.5 rounded-xl bg-[#10B981] text-[#0B0F19] font-display font-semibold text-sm tracking-wide transition-transform duration-200 hover:-translate-y-0.5"
             >
               Get In Touch
             </Link>

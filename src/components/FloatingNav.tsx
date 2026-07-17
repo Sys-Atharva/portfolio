@@ -1,12 +1,14 @@
 import { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
+import { Link } from "react-router-dom";
 import { Menu, X } from "lucide-react";
+import { NavDepth } from "@/components/NavDepth";
 
 const navItems = [
-  { name: "Home", href: "/#home" },
-  { name: "About", href: "/#about" },
-  { name: "Projects", href: "/projects" },
-  { name: "Contact", href: "/#contact" },
+  { name: "Home", to: "/#home" },
+  { name: "About", to: "/#about" },
+  { name: "Projects", to: "/projects" },
+  { name: "Contact", to: "/#contact" },
 ];
 
 const FloatingNav = () => {
@@ -19,22 +21,26 @@ const FloatingNav = () => {
       transition={{ duration: 0.6, ease: "easeOut", delay: 0.2 }}
       className="fixed inset-x-0 top-4 z-50 flex justify-center px-4 pointer-events-none"
     >
-      <nav className="pointer-events-auto flex w-full max-w-3xl items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-[#0B0F19]/90 px-5 py-3 backdrop-blur-md">
-        <a href="/#home" className="group flex items-center gap-2">
+      <NavDepth className="pointer-events-auto w-full max-w-3xl">
+        <nav className="flex w-full items-center justify-between gap-4 rounded-2xl border border-slate-800 bg-[#0B0F19]/90 px-5 py-3 backdrop-blur-md">
+        <Link to="/#home" className="group flex items-center gap-2">
           <span className="h-2.5 w-2.5 rounded-full bg-[#10B981] shadow-[0_0_12px_rgba(16,185,129,0.6)] transition-transform duration-300 group-hover:scale-125" />
           <span className="font-display text-lg font-semibold tracking-tight text-foreground">
             Atharva
           </span>
-        </a>
+        </Link>
         <div className="hidden items-center gap-1 md:flex">
           {navItems.map((item) => (
-            <a
+            <Link
               key={item.name}
-              href={item.href}
-              className="rounded-lg px-3 py-1.5 text-sm font-medium text-slate-400 transition-colors hover:text-white"
+              to={item.to}
+              className="cyl-link rounded-lg px-3 py-1.5 text-sm font-medium text-slate-400 transition-colors hover:text-white"
             >
-              {item.name}
-            </a>
+              <span className="cyl-link__inner">
+                <span className="cyl-link__face">{item.name}</span>
+                <span className="cyl-link__face" aria-hidden="true">{item.name}</span>
+              </span>
+            </Link>
           ))}
         </div>
         <button
@@ -45,6 +51,7 @@ const FloatingNav = () => {
           {menuOpen ? <X size={22} /> : <Menu size={22} />}
         </button>
       </nav>
+      </NavDepth>
       <AnimatePresence>
         {menuOpen && (
           <motion.div
@@ -55,14 +62,14 @@ const FloatingNav = () => {
             className="pointer-events-auto absolute left-4 right-4 top-20 z-50 flex flex-col gap-2 rounded-2xl border border-slate-800 bg-[#0B0F19]/95 p-4 backdrop-blur-md md:hidden"
           >
             {navItems.map((item) => (
-              <a
+              <Link
                 key={item.name}
-                href={item.href}
+                to={item.to}
                 onClick={() => setMenuOpen(false)}
                 className="rounded-lg px-4 py-3 text-sm font-medium text-slate-400 transition-colors hover:bg-white/5 hover:text-white"
               >
                 {item.name}
-              </a>
+              </Link>
             ))}
           </motion.div>
         )}

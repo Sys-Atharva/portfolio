@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { z } from 'zod';
 import { db } from '@/firebase';
 import { addDoc, collection } from 'firebase/firestore';
+import { Magnetic } from '@/components/Magnetic';
 
 const inquirySchema = z.object({
   fullName: z.string().trim().min(3, 'Name must be at least 3 characters').max(100),
@@ -121,10 +122,10 @@ export function InquiryForm() {
             </div>
 
             <div className="sm:col-span-2 pt-2">
-              <button type="submit" disabled={isSubmitting || !isFormValid()}
-                className="w-full px-6 py-4 bg-[#10B981] hover:-translate-y-0.5 hover:bg-[#0da673] hover:shadow-lg hover:shadow-[#10B981]/20 text-[#0B0F19] font-bold rounded-lg transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:translate-y-0 active:scale-[0.98]">
+              <Magnetic as="button" type="submit" disabled={isSubmitting || !isFormValid()}
+                className="w-full px-6 py-4 bg-[#10B981] hover:bg-[#0da673] hover:shadow-lg hover:shadow-[#10B981]/20 text-[#0B0F19] font-bold rounded-lg transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed active:scale-[0.98]">
                 {isSubmitting ? 'Sending...' : 'Send Message'}
-              </button>
+              </Magnetic>
             </div>
 
             {submitStatus === 'success' && (

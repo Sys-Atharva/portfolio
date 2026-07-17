@@ -1,5 +1,7 @@
-import { motion } from "framer-motion";
+import { useRef } from "react";
+import { motion, useScroll, useTransform, useSpring } from "framer-motion";
 import { Code2, FileCode2, Coffee, Cpu, Smartphone, PlusCircle } from "lucide-react";
+import { SpotlightCard } from "@/components/SpotlightCard";
 
 const container = {
   hidden: {},
@@ -20,20 +22,31 @@ const skills = [
 ];
 
 const DualCoreSection = () => {
+  const headingRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({ target: headingRef, offset: ["start end", "end start"] });
+  const rotateX = useTransform(scrollYProgress, [0, 0.5, 1], [12, 0, -12]);
+  const sRotateX = useSpring(rotateX, { stiffness: 120, damping: 20 });
+  const yParallax = useTransform(scrollYProgress, [0, 1], [40, -40]);
+
   return (
     <section id="skills" className="bg-[#0B0F19] px-8 py-24">
       <div className="max-w-7xl mx-auto">
         <motion.div
+          ref={headingRef}
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.5 }}
+          style={{ perspective: 1000 }}
           className="mb-16"
         >
           <span className="text-[#10B981] font-mono text-sm tracking-widest uppercase mb-4 block">Core Competencies</span>
-          <h2 className="text-5xl md:text-7xl font-bold tracking-tight text-white leading-[0.9]">
+          <motion.h2
+            style={{ rotateX: sRotateX, y: yParallax, willChange: "transform" }}
+            className="text-5xl md:text-7xl font-bold tracking-tight text-white leading-[0.9] [transform-style:preserve-3d]"
+          >
             Technical<br />Proficiency
-          </h2>
+          </motion.h2>
         </motion.div>
 
         <motion.div
@@ -44,18 +57,23 @@ const DualCoreSection = () => {
           className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
         >
           {skills.map((s) => (
-            <motion.div
+            <SpotlightCard
               key={s.name}
-              variants={item}
-              className="group border border-slate-800 p-8 rounded-lg bg-slate-900/40 hover:border-[#10B981]/50 transition-colors duration-300 flex flex-col will-change-transform"
+              variant={s.category === "Frontend" || s.category === "Systems" ? "emerald" : "teal"}
+              className="rounded-lg"
             >
-              <s.icon className="w-8 h-8 text-[#10B981] mb-6 opacity-40 group-hover:opacity-100 transition-opacity" />
-              <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider w-fit mb-6 ${s.accent}`}>
-                {s.category}
-              </span>
-              <h3 className="text-2xl font-bold mb-4 tracking-tight text-white">{s.name}</h3>
-              <p className="text-slate-400 text-sm leading-relaxed">{s.desc}</p>
-            </motion.div>
+              <motion.div
+                variants={item}
+                className="group border border-slate-800 p-8 rounded-lg bg-slate-900/40 hover:border-[#10B981]/50 transition-colors duration-300 flex flex-col will-change-transform"
+              >
+                <s.icon className="w-8 h-8 text-[#10B981] mb-6 opacity-40 group-hover:opacity-100 transition-opacity" />
+                <span className={`inline-flex items-center px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider w-fit mb-6 ${s.accent}`}>
+                  {s.category}
+                </span>
+                <h3 className="text-2xl font-bold mb-4 tracking-tight text-white">{s.name}</h3>
+                <p className="text-slate-400 text-sm leading-relaxed">{s.desc}</p>
+              </motion.div>
+            </SpotlightCard>
           ))}
 
           <motion.div
