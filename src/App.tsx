@@ -3,6 +3,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
+import { CustomCursor } from "@/components/ui/CustomCursor";
 import Index from "./pages/Index.tsx";
 import Projects from "./pages/Projects.tsx";
 import InquiryFormDemo from "./pages/InquiryFormDemo.tsx";
@@ -15,7 +16,7 @@ const App = () => (
     <TooltipProvider>
       <Toaster />
       <Sonner />
-      {/* ADD THE BASENAME HERE */}
+      <CustomCursor />
       <BrowserRouter basename="/portfolio">
         <Routes>
           <Route path="/" element={<Index />} />

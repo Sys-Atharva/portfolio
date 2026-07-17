@@ -2,7 +2,8 @@ import { useRef, useMemo } from "react";
 import { motion, useScroll, useTransform, useReducedMotion, type MotionValue } from "framer-motion";
 import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
-import { Magnetic } from "@/components/Magnetic";
+import { SplitText } from "@/components/ui/SplitText";
+import { MagneticButton } from "@/components/ui/MagneticButton";
 
 const titleLines = ["ATHARVA", "PURVAT"];
 
@@ -130,27 +131,26 @@ const HeroSection = () => {
             ))}
           </h1>
 
-          <p className="max-w-xl text-xl md:text-2xl text-slate-400 font-light leading-relaxed">
-            Electronics Engineer &amp; Full-Stack Developer creating{" "}
-            <span className="text-white">robust, low-latency digital systems</span> at the intersection of hardware and high-performance software.
-          </p>
+          <SplitText
+            text="Electronics Engineer & Full-Stack Developer creating robust, low-latency digital systems at the intersection of hardware and high-performance software."
+            className="max-w-xl text-xl md:text-2xl text-slate-400 font-light leading-relaxed"
+            delay={0.4}
+          />
 
           <div className="flex flex-wrap gap-4 pt-4">
-            <Magnetic as="button"
+            <MagneticButton
               onClick={() => document.getElementById("portfolio")?.scrollIntoView({ behavior: "smooth" })}
-              className="bg-crimson hover:bg-crimson-light text-white px-8 py-4 rounded-lg font-bold uppercase tracking-widest text-xs transition-colors duration-300 flex items-center gap-2"
+              className="px-8 py-4 text-xs uppercase tracking-widest font-bold"
             >
               View Works
               <ArrowRight className="w-4 h-4" />
-            </Magnetic>
-            <Magnetic className="inline-block">
-              <Link
-                to="/inquiry"
-                className="inline-block border border-slate-800 hover:border-slate-600 text-white px-8 py-4 rounded-lg font-bold uppercase tracking-widest text-xs transition-colors duration-300"
-              >
-                Contact Me
-              </Link>
-            </Magnetic>
+            </MagneticButton>
+            <Link
+              to="/inquiry"
+              className="inline-flex items-center justify-center border border-slate-800 hover:border-slate-600 text-white px-8 py-4 rounded-full font-bold uppercase tracking-widest text-xs transition-colors duration-300"
+            >
+              Contact Me
+            </Link>
           </div>
         </motion.div>
 

@@ -21,7 +21,7 @@ export function Magnetic({ children, className, max = 10, as = "div", ...rest }:
 
   const handleMove = (e: MouseEvent) => {
     const el = ref.current;
-    if (!el || !hasHover()) return;
+    if (!el || !hasHover) return;
     const r = el.getBoundingClientRect();
     x.set(((e.clientX - r.left) / r.width - 0.5) * 2 * max);
     y.set(((e.clientY - r.top) / r.height - 0.5) * 2 * max);

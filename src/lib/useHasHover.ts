@@ -1,13 +1,16 @@
-import { useEffect, useRef } from "react";
+import { useState, useEffect } from 'react';
 
-export const useHasHover = () => {
-  const ref = useRef(true);
+export function useHasHover() {
+  const [hasHover, setHasHover] = useState(false);
+
   useEffect(() => {
-    const mq = window.matchMedia("(hover: hover)");
-    ref.current = mq.matches;
-    const onChange = (e: MediaQueryListEvent) => (ref.current = e.matches);
-    mq.addEventListener("change", onChange);
-    return () => mq.removeEventListener("change", onChange);
+    const mediaQuery = window.matchMedia('(hover: hover)');
+    setHasHover(mediaQuery.matches);
+
+    const handler = (e: MediaQueryListEvent) => setHasHover(e.matches);
+    mediaQuery.addEventListener('change', handler);
+    return () => mediaQuery.removeEventListener('change', handler);
   }, []);
-  return () => ref.current;
-};
+
+  return hasHover;
+}

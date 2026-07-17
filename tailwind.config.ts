@@ -52,6 +52,7 @@ export default {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        surface: "#141414",
         crimson: {
           DEFAULT: "#DC2626",
           light: "#F87171",
@@ -79,12 +80,16 @@ export default {
           "0%, 100%": { opacity: "0.4" },
           "50%": { opacity: "0.8" },
         },
+        ripple: {
+          to: { width: "200px", height: "200px", opacity: "0" },
+        },
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "fade-up": "fade-up 0.5s ease-out forwards",
         "glow-pulse": "glow-pulse 3s ease-in-out infinite",
+        ripple: "ripple 0.6s linear",
       },
     },
   },

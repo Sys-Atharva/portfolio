@@ -1,71 +1,77 @@
-import { useRef, type ReactNode, type MouseEvent } from "react";
-import { motion, useMotionValue, useSpring, useMotionTemplate, useReducedMotion } from "framer-motion";
-import { useHasHover } from "@/lib/useHasHover";
+import { useRef, useState } from 'react';
+import { motion, useMotionTemplate, useMotionValue, useSpring, useReducedMotion } from 'framer-motion';
+import { useHasHover } from '@/lib/useHasHover';
 
-type SpotlightCardProps = {
-  children: ReactNode;
+interface SpotlightCardProps {
+  children: React.ReactNode;
   className?: string;
-  variant?: "crimson" | "neutral";
-};
+  variant?: 'crimson' | 'neutral';
+}
 
-const gradients = {
-  crimson: "radial-gradient(600px circle at var(--x) var(--y), rgba(220,38,38,0.08), transparent 40%)",
-  neutral: "radial-gradient(600px circle at var(--x) var(--y), rgba(255,255,255,0.04), transparent 40%)",
-};
-
-export function SpotlightCard({ children, className, variant = "crimson" }: SpotlightCardProps) {
+export function SpotlightCard({ children, className = '', variant = 'crimson' }: SpotlightCardProps) {
   const ref = useRef<HTMLDivElement>(null);
-  const reduce = useReducedMotion();
-  const mx = useMotionValue(50);
-  const my = useMotionValue(50);
-  const sx = useSpring(mx, { stiffness: reduce ? 9999 : 200, damping: reduce ? 9999 : 30 });
-  const sy = useSpring(my, { stiffness: reduce ? 9999 : 200, damping: reduce ? 9999 : 30 });
-  const rx = useMotionValue(0);
-  const ry = useMotionValue(0);
-  const srx = useSpring(rx, { stiffness: reduce ? 9999 : 200, damping: reduce ? 9999 : 30 });
-  const sry = useSpring(ry, { stiffness: reduce ? 9999 : 200, damping: reduce ? 9999 : 30 });
-  const bg = useMotionTemplate`${gradients[variant]}`;
   const hasHover = useHasHover();
+  const reduce = useReducedMotion();
 
-  const handleMove = (e: MouseEvent) => {
-    const el = ref.current;
-    if (!el) return;
-    if (!hasHover()) return;
-    const r = el.getBoundingClientRect();
-    const px = (e.clientX - r.left) / r.width;
-    const py = (e.clientY - r.top) / r.height;
-    mx.set(px * 100);
-    my.set(py * 100);
-    ry.set((px - 0.5) * 16);
-    rx.set((0.5 - py) * 16);
+  const mouseX = useMotionValue(0);
+  const mouseY = useMotionValue(0);
+
+  const springConfig = reduce ? { stiffness: 9999, damping: 9999 } : { stiffness: 300, damping: 30 };
+  const rotateX = useSpring(useMotionValue(0), springConfig);
+  const rotateY = useSpring(useMotionValue(0), springConfig);
+
+  const handleMouseMove = (e: React.MouseEvent) => {
+    if (!hasHover || !ref.current) return;
+    const rect = ref.current.getBoundingClientRect();
+    const width = rect.width;
+    const height = rect.height;
+    const mouseXPos = e.clientX - rect.left;
+    const mouseYPos = e.clientY - rect.top;
+
+    mouseX.set(mouseXPos);
+    mouseY.set(mouseYPos);
+
+    const centerX = width / 2;
+    const centerY = height / 2;
+
+    const rotateXValue = ((mouseYPos - centerY) / centerY) * -8;
+    const rotateYValue = ((mouseXPos - centerX) / centerX) * 8;
+
+    rotateX.set(rotateXValue);
+    rotateY.set(rotateYValue);
   };
 
-  const handleLeave = () => {
-    rx.set(0);
-    ry.set(0);
+  const handleMouseLeave = () => {
+    rotateX.set(0);
+    rotateY.set(0);
   };
+
+  const gradientColor = variant === 'crimson'
+    ? 'rgba(220, 38, 38, 0.15)'
+    : 'rgba(255, 255, 255, 0.1)';
+
+  const background = useMotionTemplate`radial-gradient(350px circle at ${mouseX}px ${mouseY}px, ${gradientColor}, transparent 80%)`;
 
   return (
-    <div
+    <motion.div
       ref={ref}
-      onMouseMove={handleMove}
-      onMouseLeave={handleLeave}
-      style={{ perspective: 800, transformStyle: "preserve-3d" }}
-      className={`relative overflow-hidden ${className ?? ""}`}
+      className={`group relative overflow-hidden rounded-xl border border-border bg-card p-6 transition-colors hover:border-crimson/50 ${className}`}
+      style={{
+        transformStyle: 'preserve-3d',
+        transform: 'perspective(1000px)',
+        rotateX,
+        rotateY,
+      }}
+      onMouseMove={handleMouseMove}
+      onMouseLeave={handleMouseLeave}
+      data-cursor="hover"
     >
       <motion.div
-        aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-[inherit]"
-        style={{ background: bg, ["--x" as string]: sx, ["--y" as string]: sy, willChange: "transform" }}
+        className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+        style={{ background }}
       />
-      <motion.div
-        className="relative"
-        style={{ rotateX: srx, rotateY: sry, transformStyle: "preserve-3d", willChange: "transform" }}
-        whileHover={hasHover() ? { transform: "translate3d(0,0,20px)" } : undefined}
-        whileTap={{ scale: 0.95 }}
-      >
-        {children}
-      </motion.div>
-    </div>
+
+      <div className="relative z-10 h-full">{children}</div>
+    </motion.div>
   );
 }
