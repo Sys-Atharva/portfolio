@@ -1,5 +1,5 @@
 import FloatingNav from "@/components/FloatingNav";
-import HeroSection from "@/components/HeroSection";
+import SplitRevealSection from "@/components/SplitRevealSection";
 import TechMarquee from "@/components/TechMarquee";
 import { BentoGrid } from "@/components/BentoGrid";
 import { CircuitTimeline } from "@/components/CircuitTimeline";
@@ -13,7 +13,7 @@ const Index = () => {
     <div className="relative min-h-screen">
       <FloatingNav />
       <main className="relative z-10">
-        <HeroSection />
+        <SplitRevealSection />
         <TechMarquee />
         <BentoGrid />
         <CircuitTimeline />

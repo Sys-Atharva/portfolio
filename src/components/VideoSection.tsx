@@ -1,5 +1,6 @@
 import { motion, useReducedMotion } from "framer-motion";
 import { Play } from "lucide-react";
+import { KineticHeading } from "@/components/ui/KineticHeading";
 
 const VideoSection = () => {
   const reduce = useReducedMotion();
@@ -7,16 +8,10 @@ const VideoSection = () => {
   return (
     <section id="video" className="py-24 px-6">
       <div className="max-w-4xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          className="mb-12"
-        >
+        <div className="mb-12">
           <span className="text-crimson font-mono text-sm tracking-widest uppercase mb-4 block">Showcase</span>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold">In Motion</h2>
-        </motion.div>
+          <KineticHeading delay={0.1}>In Motion</KineticHeading>
+        </div>
 
         <motion.div
           initial={{ opacity: 0, y: 20 }}

@@ -1,63 +1,35 @@
 import { useRef, useMemo } from "react";
-import { motion, useScroll, useTransform, useReducedMotion, type MotionValue } from "framer-motion";
-import { ArrowRight } from "lucide-react";
+import {
+  motion,
+  useScroll,
+  useTransform,
+  useReducedMotion,
+  type MotionValue,
+} from "framer-motion";
+import { ArrowRight, Cpu, Globe, Zap, Code } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SplitText } from "@/components/ui/SplitText";
 import { MagneticButton } from "@/components/ui/MagneticButton";
 import { SpotlightCard } from "@/components/SpotlightCard";
-import { Cpu, Globe, Zap, Lightbulb } from "lucide-react";
 
 const titleLines = ["ATHARVA", "PURVAT"];
 
 const coreValues = [
-  { title: "Hardware-Software Bridge", desc: "Seamlessly integrating embedded systems with modern web architectures.", icon: Cpu, pos: "top-left" as const },
-  { title: "Scalable Architecture", desc: "Building robust, full-stack applications designed for growth and reliability.", icon: Globe, pos: "top-right" as const },
-  { title: "Performance First", desc: "Obsessive optimization for 60fps animations and sub-second load times.", icon: Zap, pos: "bottom-left" as const },
-  { title: "Creative Engineering", desc: "Transforming complex technical constraints into elegant, intuitive UI.", icon: Lightbulb, pos: "bottom-right" as const },
+  { title: "Embedded Systems", desc: "IoT, FPGA, and hardware-software integration.", icon: Cpu },
+  { title: "Full-Stack Web", desc: "Scalable React, Node.js, and cloud architectures.", icon: Globe },
+  { title: "Performance", desc: "60fps animations and optimized rendering.", icon: Zap },
+  { title: "Creative Dev", desc: "Interactive UI and generative experiences.", icon: Code },
 ];
 
-const posClasses = {
-  "top-left": "top-4 left-4 md:top-12 md:left-12",
-  "top-right": "top-4 right-4 md:top-12 md:right-12",
-  "bottom-left": "bottom-4 left-4 md:bottom-12 md:left-12",
-  "bottom-right": "bottom-4 right-4 md:bottom-12 md:right-12",
-} as const;
-
-function FlyingCard({
-  value,
-  progress,
-  reduce,
-}: {
-  value: typeof coreValues[number];
-  progress: MotionValue<number>;
-  reduce: boolean;
-}) {
-  const isLeft = value.pos.includes("left");
-  const isTop = value.pos.includes("top");
-
-  const startX = isLeft ? "-50vw" : "50vw";
-  const startY = isTop ? "-30vh" : "30vh";
-
-  const x = useTransform(progress, [0, 0.6], reduce ? ["0px", "0px"] : [startX, "0px"]);
-  const y = useTransform(progress, [0, 0.6], reduce ? ["0px", "0px"] : [startY, "0px"]);
-
-  return (
-    <motion.div
-      className={`absolute w-64 md:w-72 pointer-events-auto ${posClasses[value.pos]}`}
-      style={{ x, y }}
-    >
-      <SpotlightCard variant="crimson" className="h-full">
-        <div className="flex flex-col gap-3">
-          <div className="p-2 bg-crimson/10 rounded-lg w-fit border border-crimson/20">
-            <value.icon className="w-6 h-6 text-crimson" />
-          </div>
-          <h3 className="text-lg font-bold text-foreground">{value.title}</h3>
-          <p className="text-sm text-muted-foreground leading-relaxed">{value.desc}</p>
-        </div>
-      </SpotlightCard>
-    </motion.div>
-  );
-}
+const charItem = {
+  hidden: { opacity: 0, y: "40%", rotateX: -30 },
+  show: {
+    opacity: 1,
+    y: "0%",
+    rotateX: 0,
+    transition: { duration: 0.8, ease: [0.215, 0.61, 0.355, 1] },
+  },
+};
 
 const HeroTelemetry = ({ speed }: { speed: MotionValue<number> }) => {
   const crimson = "#DC2626";
@@ -112,54 +84,52 @@ const HeroTelemetry = ({ speed }: { speed: MotionValue<number> }) => {
   );
 };
 
-const charItem = {
-  hidden: { opacity: 0, y: "40%", rotateX: -30 },
-  show: {
-    opacity: 1,
-    y: "0%",
-    rotateX: 0,
-    transition: { duration: 0.8, ease: [0.215, 0.61, 0.355, 1] },
-  },
-};
-
-const HeroSection = () => {
+const SplitRevealSection = () => {
   const reduce = useReducedMotion();
+
   const charContainer = useMemo(() => ({
     hidden: {},
     show: { transition: { staggerChildren: reduce ? 0 : 0.03 } },
   }), [reduce]);
 
-  const heroRef = useRef<HTMLElement>(null);
-  const { scrollYProgress } = useScroll({ target: heroRef, offset: ["start start", "end start"] });
-  const dashSpeed = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
-  const svgRotate = useTransform(scrollYProgress, [0, 1], [0, 5]);
-  const portraitY = useTransform(scrollYProgress, [0, 1], [0, 15]);
-
-  const assemblyRef = useRef<HTMLDivElement>(null);
-  const { scrollYProgress: assemblyProgress } = useScroll({
-    target: assemblyRef,
-    offset: ["start start", "end start"],
+  const containerRef = useRef<HTMLDivElement>(null);
+  const { scrollYProgress } = useScroll({
+    target: containerRef,
+    offset: ["start start", "end end"],
   });
-  const bgOpacity = useTransform(assemblyProgress, [0, 0.8, 1], [0, 0.6, 0.8]);
-  const centerScale = useTransform(assemblyProgress, [0, 0.8, 1], [1, 0.95, 0.9]);
-  const centerOpacity = useTransform(assemblyProgress, [0, 0.8, 1], [1, 0.8, 0.7]);
+
+  // Telemetry speed tied to scroll
+  const dashSpeed = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
+
+  // Split animation (0 → 0.5): panels slide apart
+  const leftX = useTransform(scrollYProgress, [0, 0.5], reduce ? ["0%", "0%"] : ["0%", "-25vw"]);
+  const rightX = useTransform(scrollYProgress, [0, 0.5], reduce ? ["0%", "0%"] : ["0%", "25vw"]);
+  const panelOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.4]);
+  const panelScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
+
+  // Assembly animation (0.3 → 0.7): cards rise up
+  const cardsOpacity = useTransform(scrollYProgress, [0.3, 0.5], [0, 1]);
+  const cardsY = useTransform(scrollYProgress, [0.3, 0.5], reduce ? ["0px", "0px"] : ["60px", "0px"]);
+  const cardsScale = useTransform(scrollYProgress, [0.3, 0.5], reduce ? [1, 1] : [0.85, 1]);
+  const cardsRotateX = useTransform(scrollYProgress, [0.3, 0.5], reduce ? [0, 0] : [12, 0]);
 
   return (
-    <>
-      <section ref={heroRef} id="home" className="relative min-h-screen flex items-center px-8 bg-background overflow-hidden">
+    <div ref={containerRef} id="home" className="relative h-[250vh]">
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+        {/* Telemetry background */}
         <motion.div
           className="absolute inset-0 -z-10"
-          style={{ rotate: svgRotate, willChange: "transform" }}
+          style={{ willChange: "transform" }}
         >
           <HeroTelemetry speed={dashSpeed} />
         </motion.div>
 
-        <div className="max-w-7xl mx-auto w-full grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+        {/* Split panels container */}
+        <div className="relative w-full max-w-7xl mx-auto px-8 flex items-center justify-between">
+          {/* Left panel — text content */}
           <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
-            className="lg:col-span-7 space-y-8"
+            className="w-full lg:w-1/2 space-y-8"
+            style={{ x: leftX, opacity: panelOpacity, scale: panelScale, willChange: "transform" }}
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-border bg-muted/50 text-crimson text-xs font-semibold tracking-widest uppercase">
               <span className="relative flex h-2 w-2">
@@ -214,12 +184,10 @@ const HeroSection = () => {
             </div>
           </motion.div>
 
+          {/* Right panel — portrait placeholder */}
           <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            transition={{ duration: 0.6, delay: 0.2 }}
-            style={{ y: portraitY, willChange: "transform" }}
-            className="lg:col-span-5 hidden lg:flex items-center justify-center"
+            className="hidden lg:flex w-1/2 items-center justify-center"
+            style={{ x: rightX, opacity: panelOpacity, scale: panelScale, willChange: "transform" }}
           >
             <div className="relative w-80 h-80 rounded-2xl border border-border bg-muted/30 overflow-hidden">
               <div className="absolute inset-0 bg-gradient-to-br from-crimson/10 via-transparent to-crimson-light/5" />
@@ -234,44 +202,38 @@ const HeroSection = () => {
             </div>
           </motion.div>
         </div>
-      </section>
 
-      <div ref={assemblyRef} className="relative h-[200vh] bg-background">
-        <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+        {/* Assembly: value cards */}
+        <motion.div
+          className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
+          style={{ opacity: cardsOpacity, perspective: "1200px" }}
+        >
           <motion.div
-            className="absolute inset-0 bg-background/90 backdrop-blur-md z-0"
-            style={{ opacity: bgOpacity }}
-          />
-
-          <motion.div
-            className="relative z-10 text-center px-4 max-w-2xl"
-            style={{ scale: centerScale, opacity: centerOpacity }}
+            className="grid grid-cols-2 gap-4 md:gap-6 max-w-2xl w-full px-6 pointer-events-auto"
+            style={{
+              y: cardsY,
+              scale: cardsScale,
+              rotateX: cardsRotateX,
+              transformStyle: "preserve-3d",
+              willChange: "transform",
+            }}
           >
-            <div className="w-32 h-32 md:w-48 md:h-48 mx-auto mb-6 rounded-full bg-gradient-to-br from-crimson to-crimson/50 flex items-center justify-center text-4xl md:text-6xl font-bold text-white shadow-2xl shadow-crimson/20">
-              AP
-            </div>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight text-foreground mb-4 font-display">
-              Engineering the Future
-            </h2>
-            <p className="text-lg md:text-xl text-muted-foreground max-w-lg mx-auto">
-              Bridging the gap between physical systems and digital experiences.
-            </p>
-          </motion.div>
-
-          <div className="absolute inset-0 z-20 p-4 md:p-12 pointer-events-none hidden md:block">
-            {coreValues.map((value, index) => (
-              <FlyingCard
-                key={index}
-                value={value}
-                progress={assemblyProgress}
-                reduce={reduce}
-              />
+            {coreValues.map((value) => (
+              <SpotlightCard key={value.title} variant="crimson">
+                <div className="flex flex-col gap-3">
+                  <div className="p-2 bg-crimson/10 rounded-lg w-fit border border-crimson/20">
+                    <value.icon className="w-6 h-6 text-crimson" />
+                  </div>
+                  <h3 className="text-lg font-bold text-foreground">{value.title}</h3>
+                  <p className="text-sm text-muted-foreground leading-relaxed">{value.desc}</p>
+                </div>
+              </SpotlightCard>
             ))}
-          </div>
-        </div>
+          </motion.div>
+        </motion.div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default HeroSection;
+export default SplitRevealSection;

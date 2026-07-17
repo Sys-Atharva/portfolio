@@ -2,6 +2,7 @@ import { useMemo } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { Mail } from "lucide-react";
 import { Link } from "react-router-dom";
+import { KineticHeading } from "@/components/ui/KineticHeading";
 
 const contactItem = {
   hidden: { opacity: 0, y: 20 },
@@ -29,7 +30,7 @@ const ContactSection = () => {
             <div className="w-12 h-12 rounded-2xl bg-crimson/10 flex items-center justify-center mx-auto mb-6">
               <Mail className="w-6 h-6 text-crimson" />
             </div>
-            <h2 className="font-display text-2xl sm:text-3xl font-bold mb-3">Let's Connect</h2>
+            <KineticHeading delay={0.1} className="text-2xl sm:text-3xl mb-3">Let's Connect</KineticHeading>
             <p className="text-slate-400 font-body mb-8">
               Have a project idea or just want to chat? Reach out.
             </p>

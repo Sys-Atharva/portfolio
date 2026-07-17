@@ -1,4 +1,5 @@
 import { motion, useReducedMotion } from "framer-motion";
+import { KineticHeading } from "@/components/ui/KineticHeading";
 
 const testimonials = [
   { name: "Client One", role: "Startup Founder", text: "Delivered a performant full-stack dashboard ahead of schedule. Technical depth in both frontend and infrastructure was impressive." },
@@ -12,16 +13,10 @@ const Testimonials = () => {
   return (
     <section id="testimonials" className="py-24 px-6">
       <div className="max-w-6xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.4 }}
-          className="mb-12"
-        >
+        <div className="mb-12">
           <span className="text-crimson font-mono text-sm tracking-widest uppercase mb-4 block">Feedback</span>
-          <h2 className="font-display text-3xl sm:text-4xl font-bold">What People Say</h2>
-        </motion.div>
+          <KineticHeading delay={0.1}>What People Say</KineticHeading>
+        </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
           {testimonials.map((t, i) => (
