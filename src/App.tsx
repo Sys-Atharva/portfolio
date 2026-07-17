@@ -1,7 +1,7 @@
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Toaster } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
-import { CustomCursor } from "@/components/ui/CustomCursor";
+import ParticleCursor from "@/components/ParticleCursor";
 import Index from "./pages/Index.tsx";
 import Projects from "./pages/Projects.tsx";
 import InquiryFormDemo from "./pages/InquiryFormDemo.tsx";
@@ -9,8 +9,8 @@ import NotFound from "./pages/NotFound.tsx";
 
 const App = () => (
   <TooltipProvider>
+    <ParticleCursor />
     <Toaster />
-    <CustomCursor />
     <BrowserRouter basename="/portfolio">
       <Routes>
         <Route path="/" element={<Index />} />

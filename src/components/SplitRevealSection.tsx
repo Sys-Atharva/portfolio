@@ -6,20 +6,12 @@ import {
   useReducedMotion,
   type MotionValue,
 } from "framer-motion";
-import { ArrowRight, Cpu, Globe, Zap, Code } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
 import { SplitText } from "@/components/ui/SplitText";
 import { MagneticButton } from "@/components/ui/MagneticButton";
-import { SpotlightCard } from "@/components/SpotlightCard";
 
 const titleLines = ["ATHARVA", "PURVAT"];
-
-const coreValues = [
-  { title: "Embedded Systems", desc: "IoT, FPGA, and hardware-software integration.", icon: Cpu },
-  { title: "Full-Stack Web", desc: "Scalable React, Node.js, and cloud architectures.", icon: Globe },
-  { title: "Performance", desc: "60fps animations and optimized rendering.", icon: Zap },
-  { title: "Creative Dev", desc: "Interactive UI and generative experiences.", icon: Code },
-];
 
 const charItem = {
   hidden: { opacity: 0, y: "40%", rotateX: -30 },
@@ -98,7 +90,6 @@ const SplitRevealSection = () => {
     offset: ["start start", "end end"],
   });
 
-  // Telemetry speed tied to scroll
   const dashSpeed = useTransform(scrollYProgress, [0, 1], [1, 0.3]);
 
   // Split animation (0 → 0.5): panels slide apart
@@ -107,15 +98,23 @@ const SplitRevealSection = () => {
   const panelOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0.4]);
   const panelScale = useTransform(scrollYProgress, [0, 0.5], [1, 0.95]);
 
-  // Assembly animation (0.3 → 0.7): cards rise up
-  const cardsOpacity = useTransform(scrollYProgress, [0.3, 0.5], [0, 1]);
-  const cardsY = useTransform(scrollYProgress, [0.3, 0.5], reduce ? ["0px", "0px"] : ["60px", "0px"]);
-  const cardsScale = useTransform(scrollYProgress, [0.3, 0.5], reduce ? [1, 1] : [0.85, 1]);
-  const cardsRotateX = useTransform(scrollYProgress, [0.3, 0.5], reduce ? [0, 0] : [12, 0]);
+  // Center "About Me" reveal (0.2 → 0.6)
+  const centerOpacity = useTransform(scrollYProgress, [0.2, 0.6], reduce ? [1, 1] : [0, 1]);
+  const centerScale = useTransform(scrollYProgress, [0.2, 0.6], reduce ? [1, 1] : [0.9, 1]);
+  const centerY = useTransform(scrollYProgress, [0.2, 0.6], reduce ? [0, 0] : [40, 0]);
+
+  // Dimming overlay
+  const overlayOpacity = useTransform(scrollYProgress, [0, 0.5], [0, 0.95]);
 
   return (
     <div ref={containerRef} id="home" className="relative h-[250vh]">
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex items-center justify-center">
+      <div className="sticky top-0 h-screen w-full overflow-hidden">
+        {/* Dimming overlay — bg only, no backdrop-blur for perf */}
+        <motion.div
+          className="absolute inset-0 bg-background z-0"
+          style={{ opacity: overlayOpacity }}
+        />
+
         {/* Telemetry background */}
         <motion.div
           className="absolute inset-0 -z-10"
@@ -124,8 +123,9 @@ const SplitRevealSection = () => {
           <HeroTelemetry speed={dashSpeed} />
         </motion.div>
 
-        {/* Split panels container */}
-        <div className="relative w-full max-w-7xl mx-auto px-8 flex items-center justify-between">
+        {/* Split panels container — absolute fills viewport, flex centers content vertically */}
+        <div className="absolute inset-0 z-10 flex items-center">
+          <div className="w-full max-w-7xl mx-auto px-8 flex items-center justify-between">
           {/* Left panel — text content */}
           <motion.div
             className="w-full lg:w-1/2 space-y-8"
@@ -201,35 +201,56 @@ const SplitRevealSection = () => {
               </div>
             </div>
           </motion.div>
+          </div>
         </div>
 
-        {/* Assembly: value cards */}
+        {/* Center "About Me" reveal — z-20, above panels, flex-centered in viewport */}
         <motion.div
           className="absolute inset-0 z-20 flex items-center justify-center pointer-events-none"
-          style={{ opacity: cardsOpacity, perspective: "1200px" }}
+          style={{ opacity: centerOpacity, scale: centerScale, y: centerY }}
         >
-          <motion.div
-            className="grid grid-cols-2 gap-4 md:gap-6 max-w-2xl w-full px-6 pointer-events-auto"
-            style={{
-              y: cardsY,
-              scale: cardsScale,
-              rotateX: cardsRotateX,
-              transformStyle: "preserve-3d",
-              willChange: "transform",
-            }}
-          >
-            {coreValues.map((value) => (
-              <SpotlightCard key={value.title} variant="crimson">
-                <div className="flex flex-col gap-3">
-                  <div className="p-2 bg-crimson/10 rounded-lg w-fit border border-crimson/20">
-                    <value.icon className="w-6 h-6 text-crimson" />
-                  </div>
-                  <h3 className="text-lg font-bold text-foreground">{value.title}</h3>
-                  <p className="text-sm text-muted-foreground leading-relaxed">{value.desc}</p>
+          <div className="relative w-full max-w-lg text-center pointer-events-auto">
+            <div className="absolute inset-0 bg-crimson/20 blur-3xl rounded-full pointer-events-none" />
+            <div className="relative z-10 p-8 md:p-10 rounded-2xl border border-crimson/20 bg-surface">
+              <span className="inline-block px-3 py-1 text-xs font-bold tracking-widest text-crimson uppercase mb-5 border border-crimson/30 rounded-full bg-crimson/10">
+                About Me
+              </span>
+
+              <p className="text-lg md:text-xl font-medium text-foreground leading-relaxed mb-4">
+                I build at the intersection of <span className="text-crimson">hardware and software</span> — from <span className="text-crimson">FPGA design</span> to <span className="text-crimson">full-stack architecture</span>.
+              </p>
+              <p className="text-sm text-muted-foreground leading-relaxed mb-6">
+                Electronics &amp; Telecommunications engineer with a passion for performance-critical systems. I craft interfaces that feel instant and architectures that scale.
+              </p>
+
+              <div className="flex justify-center gap-6 mb-6 text-center">
+                <div>
+                  <p className="text-xl font-bold text-foreground">3+</p>
+                  <p className="text-xs text-muted-foreground">Years Coding</p>
                 </div>
-              </SpotlightCard>
-            ))}
-          </motion.div>
+                <div className="w-px bg-border" />
+                <div>
+                  <p className="text-xl font-bold text-foreground">15+</p>
+                  <p className="text-xs text-muted-foreground">Projects</p>
+                </div>
+                <div className="w-px bg-border" />
+                <div>
+                  <p className="text-xl font-bold text-crimson">E&amp;T</p>
+                  <p className="text-xs text-muted-foreground">Engineer</p>
+                </div>
+              </div>
+
+              <div className="flex flex-wrap justify-center gap-2 mb-6">
+                {["React", "TypeScript", "Node.js", "FPGA", "VHDL", "Firebase"].map((tag) => (
+                  <span key={tag} className="px-2.5 py-1 text-xs rounded-md bg-muted border border-border text-muted-foreground">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+
+              <p className="text-xs text-muted-foreground/50 tracking-wider uppercase">Scroll to explore ↓</p>
+            </div>
+          </div>
         </motion.div>
       </div>
     </div>
