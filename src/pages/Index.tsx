@@ -1,9 +1,8 @@
 import FloatingNav from "@/components/FloatingNav";
 import HeroSection from "@/components/HeroSection";
 import TechMarquee from "@/components/TechMarquee";
-import ValueProps from "@/components/ValueProps";
-import PortfolioPreview from "@/components/PortfolioPreview";
-import ExperienceTimeline from "@/components/ExperienceTimeline";
+import { BentoGrid } from "@/components/BentoGrid";
+import { CircuitTimeline } from "@/components/CircuitTimeline";
 import VideoSection from "@/components/VideoSection";
 import Testimonials from "@/components/Testimonials";
 import ContactSection from "@/components/ContactSection";
@@ -16,9 +15,8 @@ const Index = () => {
       <main className="relative z-10">
         <HeroSection />
         <TechMarquee />
-        <ValueProps />
-        <PortfolioPreview />
-        <ExperienceTimeline />
+        <BentoGrid />
+        <CircuitTimeline />
         <VideoSection />
         <Testimonials />
         <ContactSection />
